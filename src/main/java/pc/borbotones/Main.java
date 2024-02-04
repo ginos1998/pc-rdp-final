@@ -43,8 +43,14 @@ public class Main {
         }
         for (Transition transition : transitions) {
             System.out.println(transition.getName() + " is enabled: " + transition.isEnabled());
-            System.out.println("has input: " + transition.getInput().toString());
-            System.out.println("has output: " + transition.getOutput().toString());
+        }
+    }
+
+    public static void print_in_outs(Transition[] transitions) {
+        for (Transition transition : transitions) {
+            System.out.println(transition.getName() + " has inputs: " + transition.getInput());
+            System.out.println(transition.getName() + " has outputs: " + transition.getOutput());
+            System.out.println();
         }
     }
 
@@ -55,6 +61,8 @@ public class Main {
         connect_elements(places, transitions, Config.INCIDENCE_MATRIX);
         mark_initial(places, Config.INITIAL_MARKING);
 
+        // test the Petri net
+        print_in_outs(transitions);
         print_state(places, transitions);
         transitions[Transitions.T1.ordinal()].fire();
         System.out.println("\n" + "Fired T1" + "\n");
