@@ -37,13 +37,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
-        Place[] places = new Place[Places.values().length];
-        Transition[] transitions = new Transition[Transitions.values().length];
-        createPetriNet(places, transitions);
-        connect_elements(places, transitions, Config.INCIDENCE_MATRIX);
-        mark_initial(places, Config.INITIAL_MARKING);
-
+    public static void print_state(Place[] places, Transition[] transitions) {
         for (Place place : places) {
             System.out.println(place.getName() + " has " + place.getNumTokens() + " tokens");
         }
@@ -52,5 +46,18 @@ public class Main {
             System.out.println("has input: " + transition.getInput().toString());
             System.out.println("has output: " + transition.getOutput().toString());
         }
+    }
+
+    public static void main(String[] args) {
+        Place[] places = new Place[Places.values().length];
+        Transition[] transitions = new Transition[Transitions.values().length];
+        createPetriNet(places, transitions);
+        connect_elements(places, transitions, Config.INCIDENCE_MATRIX);
+        mark_initial(places, Config.INITIAL_MARKING);
+
+        print_state(places, transitions);
+        transitions[Transitions.T1.ordinal()].fire();
+        System.out.println("\n" + "Fired T1" + "\n");
+        print_state(places, transitions);
     }
 }
