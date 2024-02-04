@@ -1,6 +1,21 @@
 package pc.borbotones;
 
 public abstract class Config {
+    public enum TRANSITIONS {
+        T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
+    }
+
+    public enum PLACES {
+        P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, Cs1, Cs2, Cs3
+    }
+
+    public static final boolean[][] T_INVARIANTS = {
+        { true, true, false, true, false, true, false, true, false, false, false, false },
+        { true, false, true, false, true, false, true, true, false, false, false, false },
+        { false, false, false, false, false, false, true, true, true, true, true, true }
+    };
+
+
     public static final int[] INITIAL_MARKING = {0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 2, 2, 3, 1, 3, 4, 6};
 
     public static final int[][] INCIDENCE_MATRIX = {
@@ -24,4 +39,5 @@ public abstract class Config {
             {  0, -1, -1,  1,  1,  0,  0,  0, -1,  1,  0,  0}, //CS2
             { -1,  0,  0,  1,  1,  0,  0,  0,  0,  0,  1,  0}, //CS3
     };
+
 }

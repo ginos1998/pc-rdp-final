@@ -1,18 +1,14 @@
 package pc.borbotones;
 
 public class Main {
-    public enum Places {
-        P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, Cs1, Cs2, Cs3
-    }
-    public enum Transitions {
-        T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
-    }
+
+
 
     public static void createPetriNet(Place[] places, Transition[] transitions) {
-        for (Places place : Places.values()) {
+        for (Config.PLACES place : Config.PLACES.values()) {
             places[place.ordinal()] = new Place(place.name());
         }
-        for (Transitions transition : Transitions.values()) {
+        for (Config.TRANSITIONS transition : Config.TRANSITIONS.values()) {
             transitions[transition.ordinal()] = new Transition(transition.name());
         }
     }
@@ -39,7 +35,7 @@ public class Main {
 
     public static void print_state(Place[] places, Transition[] transitions) {
         for (Place place : places) {
-            System.out.println(place.getName() + " has " + place.getNumTokens() + " tokens");
+            System.out.println(place.toString() + " has " + place.getNumTokens() + " tokens");
         }
         for (Transition transition : transitions) {
             System.out.println(transition.getName() + " is enabled: " + transition.isEnabled());
@@ -55,8 +51,8 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Place[] places = new Place[Places.values().length];
-        Transition[] transitions = new Transition[Transitions.values().length];
+        Place[] places = new Place[Config.PLACES.values().length];
+        Transition[] transitions = new Transition[Config.TRANSITIONS.values().length];
         createPetriNet(places, transitions);
         connect_elements(places, transitions, Config.INCIDENCE_MATRIX);
         mark_initial(places, Config.INITIAL_MARKING);
@@ -64,7 +60,7 @@ public class Main {
         // test the Petri net
         print_in_outs(transitions);
         print_state(places, transitions);
-        transitions[Transitions.T1.ordinal()].fire();
+        transitions[Config.TRANSITIONS.T1.ordinal()].fire();
         System.out.println("\n" + "Fired T1" + "\n");
         print_state(places, transitions);
     }

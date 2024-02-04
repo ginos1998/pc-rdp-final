@@ -42,10 +42,6 @@ public class Place {
         return this.num_tokens;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
     public String toString() {
         return this.name;
     }
