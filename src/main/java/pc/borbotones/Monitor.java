@@ -3,6 +3,7 @@ package pc.borbotones;
 import java.util.HashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.List;
 
 public class Monitor {
     private final ReentrantLock lock;
@@ -10,6 +11,8 @@ public class Monitor {
     private final Policy policy;
     private final Logger logger;
     private boolean enabled;
+
+    private List<int[]> invariantsT;
 
     public Monitor(Transition[] transitions, Policy policy, Logger logger) {
         this.lock = new ReentrantLock();

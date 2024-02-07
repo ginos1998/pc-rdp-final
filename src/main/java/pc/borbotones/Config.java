@@ -9,12 +9,17 @@ public abstract class Config {
         P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, Cs1, Cs2, Cs3
     }
 
+    public static final int [][] T_INVARIANTS_INT = {
+            {1,2,4,6,8},
+            {1,3,5,7,8},
+            {9,10,11,12}
+    };
+
     public static final boolean[][] T_INVARIANTS = {
         { true, true, false, true, false, true, false, true, false, false, false, false },
         { true, false, true, false, true, false, true, true, false, false, false, false },
-        { false, false, false, false, false, false, true, true, true, true, true, true }
+        { false, false, false, false, false, false, false, false, true, true, true, true }
     };
-
 
     public static final int[] INITIAL_MARKING = {0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 2, 2, 3, 1, 3, 4, 6};
 

@@ -3,11 +3,12 @@ package pc.borbotones;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Transition implements Subscriber {
     private String name;
+    private int number;
     private boolean enabled;
+    private String segmentTag;
     private Map<Place, Boolean> input;
     private List<Place> output;
 
@@ -16,6 +17,13 @@ public class Transition implements Subscriber {
         this.enabled = false;
         this.input = new java.util.HashMap<>();
         this.output = new java.util.ArrayList<>();
+    }
+    public void setNumber(int number){
+        this.number = number;
+    }
+
+    public int getNumber(){
+        return this.number;
     }
 
     public void addInput(Place place) {
