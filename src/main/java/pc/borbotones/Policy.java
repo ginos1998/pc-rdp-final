@@ -1,9 +1,6 @@
 package pc.borbotones;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Policy {
@@ -43,8 +40,11 @@ public class Policy {
         List<Integer> orderedInvariantsFiredList = getOrderedInvariantsFiredList();
 
         Transition transition = null;
-        for (Transition t: availableTransitionsList) {
-            for (Integer inv: orderedInvariantsFiredList) {
+
+        Collections.reverse(availableTransitionsList);
+
+        for (Integer inv: orderedInvariantsFiredList) {
+            for (Transition t: availableTransitionsList) {
                 if (Config.T_INVARIANTS[inv][t.getNumber()]) {
                     return t;
                 }
