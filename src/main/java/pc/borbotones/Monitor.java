@@ -14,7 +14,7 @@ public class Monitor {
 
     private List<int[]> invariantsT;
 
-    public Monitor(Transition[] transitions, Policy policy, Logger logger) {
+    public Monitor(List<Transition> transitions, Policy policy, Logger logger) {
         this.lock = new ReentrantLock();
         this.transitions_queues = new HashMap<>();
         for (Transition transition : transitions) {
@@ -57,5 +57,9 @@ public class Monitor {
 
     public void disable() {
         enabled = false;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 }

@@ -12,14 +12,12 @@ public class Transition implements Subscriber {
     private Map<Place, Boolean> input;
     private List<Place> output;
 
-    public Transition(String name) {
+    public Transition(String name, int number) {
         this.name = name;
+        this.number = number;
         this.enabled = false;
         this.input = new java.util.HashMap<>();
         this.output = new java.util.ArrayList<>();
-    }
-    public void setNumber(int number){
-        this.number = number;
     }
 
     public int getNumber(){

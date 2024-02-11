@@ -7,15 +7,6 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    public static void createPetriNet(Place[] places, Transition[] transitions) {
-        for (Config.PLACES place : Config.PLACES.values()) {
-            places[place.ordinal()] = new Place(place.name());
-        }
-        for (Config.TRANSITIONS transition : Config.TRANSITIONS.values()) {
-            transitions[transition.ordinal()] = new Transition(transition.name());
-        }
-    }
-
     public static void connectElements(List<Place> placeList, List<Transition> transitionList, int[][] incidenceMatrix) {
         for (int p = 0; p < incidenceMatrix.length; p++) {
             for (int t = 0; t < incidenceMatrix[p].length; t++) {
@@ -74,22 +65,15 @@ public class Main {
     public static void main(String[] args) {
         Logger log = new Logger();
         List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name())).collect(Collectors.toList());
-        List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name())).collect(Collectors.toList());
-        Place[] places = new Place[Config.PLACES.values().length];
-        Transition[] transitions = new Transition[Config.TRANSITIONS.values().length];
-        createPetriNet(places, transitions);
+        List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
+        printState(placeList, transitionList);
+
         connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
         markInitial(placeList, Config.INITIAL_MARKING);
-        // test the Petri net
-        AtomicInteger i = new AtomicInteger();
-        transitionList.forEach(t -> t.setNumber(i.getAndIncrement()));
-
-        transitionList.forEach(t -> t.setNumber(transitionList.indexOf(t)+1));
 
         printInOuts(transitionList);
         printState(placeList, transitionList);
         fireSequencesTest(transitionList, log);
-        printState(placeList, transitionList);
 
     }
 

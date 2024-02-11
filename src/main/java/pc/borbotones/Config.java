@@ -24,6 +24,15 @@ public abstract class Config {
         { false, false, false, false, false, false, false, false, true, true, true, true }
     };
 
+    public static final List<List<Integer>> SEGMENTS = Arrays.asList(
+            Arrays.asList(9,10,11,12),
+            Arrays.asList(1),
+            Arrays.asList(2, 4,6),
+            Arrays.asList(3,5,7),
+            Arrays.asList(8)
+    );
+    public static final int[] SEGMENT_THREADS = { 4, 2, 4,4,1 };
+
     public static final int[] INITIAL_MARKING = {0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 2, 2, 3, 1, 3, 4, 6};
 
     public static final int[][] INCIDENCE_MATRIX = {
