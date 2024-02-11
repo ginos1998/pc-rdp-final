@@ -3,7 +3,6 @@ package pc.borbotones;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Main2 {
@@ -47,7 +46,7 @@ public class Main2 {
         List<Thread> threadList = new ArrayList<>();
         for (int i = 0; i < segmentList.size(); i++) {
             for (int n = 0; n < Config.SEGMENT_THREADS[i]; n++){
-                Thread thread = new Thread(segmentList.get(i));
+                Thread thread = new Thread(segmentList.get(i), "T"+"S"+i+"-"+n);
                 threadList.add(thread);
             }
         }
@@ -65,8 +64,8 @@ public class Main2 {
         List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name())).collect(Collectors.toList());
         List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
 
-        Logger log = new Logger();
-        Policy policy = new Policy(transitionList, log);
+        DataController log = new DataController();
+        Policy policy = new Policy(transitionList, placeList, log);
         Monitor monitor = new Monitor(transitionList, policy, log);
 
         connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
@@ -74,6 +73,7 @@ public class Main2 {
 
         List<Segment> segmentList = createSegments(transitionList, monitor);
         List<Thread> trheadList = createThreads(segmentList);
+
         runThreads(trheadList);
     }
 

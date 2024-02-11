@@ -5,7 +5,9 @@ import java.util.stream.Collectors;
 
 public class Policy {
     List<Transition> transitionsList;
-    private Logger logger;
+    private DataController dataController;
+
+    private List<Place> placeList;
 
 
     private List<Transition> getAvailableTransitionsList() {
@@ -14,13 +16,14 @@ public class Policy {
             .collect(Collectors.toList());
     }
 
-    public Policy(List<Transition> transitionsList, Logger logger) {
+    public Policy(List<Transition> transitionsList, List<Place> placeList, DataController dataController) {
         this.transitionsList = transitionsList;
-        this.logger = logger;
+        this.dataController = dataController;
+        this.placeList = placeList;
     }
 
-    private List<Integer> getOrderedInvariantsFiredList() {
-        List<Integer> invariantsFiredList = logger.getInvariantsFiredList();
+    private List<Integer> getOrderedInvariantsCounterList() {
+        List<Integer> invariantsFiredList = dataController.getInvariantsCounterList();
         Map<Integer, Integer> map = new HashMap<>();
 
         for (int i = 0; i < invariantsFiredList.size(); i++) {
@@ -37,15 +40,15 @@ public class Policy {
 
     public Transition next(){
         List<Transition> availableTransitionsList = getAvailableTransitionsList();
-        List<Integer> orderedInvariantsFiredList = getOrderedInvariantsFiredList();
+        List<Integer> orderedInvariantsCounterList = getOrderedInvariantsCounterList();
 
         Transition transition = null;
 
         Collections.reverse(availableTransitionsList);
 
-        for (Integer inv: orderedInvariantsFiredList) {
+        for (Integer inv: orderedInvariantsCounterList) {
             for (Transition t: availableTransitionsList) {
-                if (Config.T_INVARIANTS[inv][t.getNumber()]) {
+                if (Config.T_INVARIANT_LIST.get(inv).contains(t.getNumber())){
                     return t;
                 }
             }

@@ -18,12 +18,6 @@ public abstract class Config {
             Arrays.asList(9,10,11,12)
     );
 
-    public static final boolean[][] T_INVARIANTS = {
-        { true, true, false, true, false, true, false, true, false, false, false, false },
-        { true, false, true, false, true, false, true, true, false, false, false, false },
-        { false, false, false, false, false, false, false, false, true, true, true, true }
-    };
-
     public static final List<List<Integer>> SEGMENTS = Arrays.asList(
             Arrays.asList(9,10,11,12),
             Arrays.asList(1),
@@ -52,9 +46,9 @@ public abstract class Config {
             {  0, -1, -1,  1,  1,  0,  0,  0,  0, -1,  1,  0}, //P13
             {  0,  0,  0, -1, -1,  1,  1,  0, -1,  1,  0,  0}, //P14
             {  0,  0,  0,  0,  0, -1, -1,  1,  0,  0,  0,  0}, //P15
-            { -1,  1,  1,  0,  0,  0,  0,  0, -1, -1,  1,  0}, //CS1
+            { -1,  1,  1,  0,  0,  0,  0,  0,  0, -1,  1,  0}, //CS1
             {  0, -1, -1,  1,  1,  0,  0,  0, -1,  1,  0,  0}, //CS2
-            { -1,  0,  0,  1,  1,  0,  0,  0,  0,  0,  1,  0}, //CS3
+            { -1,  0,  0,  1,  1,  0,  0,  0, -1,  0,  1,  0}, //CS3
     };
 
 }

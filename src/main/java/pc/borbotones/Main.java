@@ -31,7 +31,7 @@ public class Main {
         });
     }
 
-    private static void fireSequencesTest(List<Transition> transitions, Logger log) {
+    private static void fireSequencesTest(List<Transition> transitions, DataController log) {
         transitions.get(Config.TRANSITIONS.T1.ordinal()).fire();
         System.out.println("\n" + "Fired T1" + "\n");
         log.addNewTransition(transitions.get(Config.TRANSITIONS.T1.ordinal()));
@@ -62,7 +62,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Logger log = new Logger();
+        DataController log = new DataController();
         List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name())).collect(Collectors.toList());
         List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
         printState(placeList, transitionList);

@@ -9,18 +9,18 @@ public class Monitor {
     private final ReentrantLock lock;
     private final HashMap<String,Condition> transitions_queues;
     private final Policy policy;
-    private final Logger logger;
+    private final DataController dataController;
     private boolean enabled;
 
     private List<int[]> invariantsT;
 
-    public Monitor(List<Transition> transitions, Policy policy, Logger logger) {
+    public Monitor(List<Transition> transitions, Policy policy, DataController dataController) {
         this.lock = new ReentrantLock();
         this.transitions_queues = new HashMap<>();
         for (Transition transition : transitions) {
             this.transitions_queues.put(transition.getName(), this.lock.newCondition());
         }
-        this.logger = logger;
+        this.dataController = dataController;
         this.policy = policy;
         this.enabled = true;
     }
@@ -35,10 +35,11 @@ public class Monitor {
                 transitions_queues.get(transition.getName()).await();
 
             transition.fire();
-            logger.registerFire(transition);
+            dataController.registerFire(transition);
 
 
             Transition next = policy.next();
+            //System.out.println("Thread: "+ Thread.currentThread().getName() +" Fired: " + transition.getName() + " next: " + (next == null ? "null" : next.getName()));
             if(next != null)
                 transitions_queues.get(next.getName()).signal();
             else
