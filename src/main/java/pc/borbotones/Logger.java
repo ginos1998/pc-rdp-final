@@ -1,92 +1,66 @@
 package pc.borbotones;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Logger {
-    private int[] invariantsFired;
-    private ArrayList<ArrayList<Integer>> invariantsRegister;
-    private int[] invariantsCounter;
+    private List<Integer> invariantsFiredList;
+    private List<List<Integer>> invariantRegisterList;
+    private List<Integer> invariantsCounterList;
 
     public Logger() {
-        invariantsRegister = new ArrayList<>();
-        invariantsCounter = new int[Config.T_INVARIANTS_INT.length];
+        invariantRegisterList = new ArrayList<>();
+        invariantsCounterList = new ArrayList<>();
     }
 
     public void registerFire(Transition transition) {
         if(transition.getNumber() == 1 || transition.getNumber() == 9){
             createNewRegister(transition.getNumber());
         }else{
-            addTransition(transition);
-
+            addNewTransition(transition);
         }
     }
 
-    public int[] getInvariantsFired() {
-        return invariantsFired;
+    public List<Integer> getInvariantsFiredList() {
+        return invariantsFiredList;
     }
 
     private void createNewRegister(Integer id) {
-        ArrayList<Integer> newRegister = new ArrayList<>();
-        newRegister.add(id);
-        invariantsRegister.add(newRegister);
+        invariantRegisterList.add(Collections.singletonList(id));
     }
 
-    public void addTransition(Transition transition){
+    public void addNewTransition(Transition transition) {
         if(transition.getNumber() == 1 || transition.getNumber() == 9){
             createNewRegister(transition.getNumber());
         }
-        for (int[] inv: Config.T_INVARIANTS_INT) {
-            ArrayList<Integer> invArray = convertIntArrayToArrayList(inv);
-            if (invArray.contains(transition.getNumber())) {
-                for (ArrayList<Integer> reg : invariantsRegister) {
-                    if (!reg.contains(transition.getNumber())) {
-                        boolean checkPassed = verifyInvariant(invArray, reg, invArray.indexOf(transition.getNumber()));
-                        if(checkPassed){
+
+        Config.T_INVARIANT_LIST.stream()
+            .filter(inv -> inv.contains(transition.getNumber()))
+                .forEach(inv -> invariantRegisterList.stream()
+                        .filter(reg -> !reg.contains(transition.getNumber()))
+                        .filter(reg -> verifyInvariant(inv, reg, inv.indexOf(transition.getNumber())))
+                        .forEach(reg -> {
                             reg.add(transition.getNumber());
                             incrementCounters(reg);
-                            break;
-                        }
-
-                    }
-                }
-            }
-        }
-    }
-    private ArrayList<Integer> convertIntArrayToArrayList(int[] intArray){
-        return Arrays.stream(intArray)
-                .boxed()
-                .collect(Collectors.toCollection(ArrayList::new));
+                        }));
     }
 
-    private boolean verifyInvariant(ArrayList<Integer> invArray, ArrayList<Integer> invReg, int id){
-        int[] inv = arrayListToArray(invArray);
-        int[] reg = arrayListToArray(invReg);
+    private boolean verifyInvariant(List<Integer> inv, List<Integer> reg, int id){
         int i;
-        for(i = 0; i < reg.length; i++){
-            if(reg[i] != inv[i]){
-                i=-1;
+        for(i = 0; i < reg.size(); i++){
+            if(!reg.get(i).equals(inv.get(i))){
+                i = -1;
                 break;
             }
         }
         return i == id;
     }
 
-    private int[] arrayListToArray(ArrayList<Integer> arrayList) {
-        // Convertir ArrayList<Integer> a int[] usando stream
-        return arrayList.stream()
-                .mapToInt(i -> i) // Convierte Integer a int
-                .toArray();
+    private void incrementCounters(List<Integer> reg){
+        Config.T_INVARIANT_LIST.stream()
+                .filter(inv -> inv.equals(reg))
+                .forEach(inv -> invariantsCounterList.set(Config.T_INVARIANT_LIST.indexOf(inv), invariantsCounterList.get(Config.T_INVARIANT_LIST.indexOf(inv)) + 1));
     }
 
-    private void incrementCounters(ArrayList<Integer> reg){
-        int[] regArray = arrayListToArray(reg);
-        for(int i = 0; i<Config.T_INVARIANTS_INT.length;i++){
-            if (Arrays.equals(regArray, Config.T_INVARIANTS_INT[i])){
-                invariantsCounter[i]++;
-            }
-        }
-    }
 }
 
 

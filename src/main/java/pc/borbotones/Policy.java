@@ -2,40 +2,40 @@ package pc.borbotones;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Policy {
-    private Transition[] transitions;
+    List<Transition> transitionsList;
     private Logger logger;
 
-
-    private boolean[] getAvailableTransitions() {
-        boolean[] available_transitions = new boolean[transitions.length];
-        for (int i = 0; i < transitions.length; i++) {
-            available_transitions[i] = transitions[i].isEnabled();
-        }
-        return available_transitions;
+    private List<Boolean> getAvailableTransitionsList() {
+        return transitionsList.stream()
+            .filter(Transition::isEnabled)
+            .map(Transition::isEnabled)
+            .collect(Collectors.toList());
     }
 
-    private int minIndexInArray(int[] array){
-        int min = Integer.MAX_VALUE;
-        int index = -1;
-        for (int i = 0; i < array.length; i++) {
-            if(array[i] < min){
-                min = array[i];
-                index = i;
-            }
+    private Integer minIndexInList(List<Integer> list){
+        if (list == null || list.isEmpty() || list.contains(null)) {
+            return -1;
         }
-        return index;
+
+        if (list.size() == 1) {
+            return list.get(0);
+        }
+
+        return list.indexOf(list.stream().min(Integer::compare).get());
     }
 
-    public Policy(Transition[] transitions, Logger logger) {
-        this.transitions = transitions;
+    public Policy(List<Transition> transitionsList, Logger logger) {
+        this.transitionsList = transitionsList;
         this.logger = logger;
     }
 
     public Transition next(){
-        boolean[] available_transitions = getAvailableTransitions();
-        int[] invariantsFired = logger.getInvariantsFired();
+        List<Boolean> availableTransitionsList = getAvailableTransitionsList();
+        List<Integer> invariantsFiredList = logger.getInvariantsFiredList();
         // Ver como equilibrar los invariantes, podes hacer Config.T_INVARIANTS[invariante][transicion]
         // para saber si la transicion está en el invariante
         return  null;
