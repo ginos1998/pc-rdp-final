@@ -39,7 +39,10 @@ public class Logger {
                 .forEach(inv -> invariantRegisterList.stream()
                     .filter(reg -> !reg.contains(transition.getNumber()))
                     .filter(reg -> verifyInvariant(inv, reg, inv.indexOf(transition.getNumber())))
-                    .peek(reg -> reg.add(transition.getNumber()))
+                    .peek(reg -> {
+                        reg.add(transition.getNumber());
+                        incrementCounters(reg);
+                    })
                     );
         } catch (Exception e) {
             throw new RuntimeException();
