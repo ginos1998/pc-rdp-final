@@ -40,37 +40,12 @@ public class Logger {
                     .filter(reg -> !reg.contains(transition.getNumber()))
                     .filter(reg -> verifyInvariant(inv, reg, inv.indexOf(transition.getNumber())))
                     .peek(reg -> reg.add(transition.getNumber()))
-//                    .forEach(reg -> {
-//                        reg.add(transition.getNumber());
-//                        incrementCounters(reg);
-//                    })
                     );
         } catch (Exception e) {
             throw new RuntimeException();
         }
     }
 
-//    public void addTransition(Transition transition){
-//        if(transition.getNumber() == 1 || transition.getNumber() == 9){
-//            createNewRegister(transition.getNumber());
-//        }
-//        for (int[] inv: Config.T_INVARIANTS_INT) {
-//            ArrayList<Integer> invArray = convertIntArrayToArrayList(inv);
-//            if (invArray.contains(transition.getNumber())) {
-//                for (ArrayList<Integer> reg : invariantsRegister) {
-//                    if (!reg.contains(transition.getNumber())) {
-//                        boolean checkPassed = verifyInvariant(invArray, reg, invArray.indexOf(transition.getNumber()));
-//                        if(checkPassed){
-//                            reg.add(transition.getNumber());
-//                            incrementCounters(reg);
-//                            break;
-//                        }
-//
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     private boolean verifyInvariant(List<Integer> inv, List<Integer> reg, int id){
         int i;
