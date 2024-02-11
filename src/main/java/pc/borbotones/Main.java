@@ -63,6 +63,14 @@ public class Main {
         log.addNewTransition(transitions.get(Config.TRANSITIONS.T8.ordinal()));
     }
 
+    public static void markInitial(List<Place> placeList, int[] initial_marking) {
+        for (int i = 0; i < initial_marking.length; i++) {
+            for (int j = 0; j < initial_marking[i]; j++) {
+                placeList.get(i).addToken();
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Logger log = new Logger();
         List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name())).collect(Collectors.toList());
@@ -71,6 +79,7 @@ public class Main {
         Transition[] transitions = new Transition[Config.TRANSITIONS.values().length];
         createPetriNet(places, transitions);
         connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
+        markInitial(placeList, Config.INITIAL_MARKING);
         // test the Petri net
         AtomicInteger i = new AtomicInteger();
         transitionList.forEach(t -> t.setNumber(i.getAndIncrement()));
