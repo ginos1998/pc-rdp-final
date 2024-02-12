@@ -113,6 +113,8 @@ public class DataController {
         List<Double> invariantPercentages = invariantsRunningCounterList.stream()
                 .map(count -> ((double) count / totalInvariants) * 100) // Convertir a porcentaje
                 .collect(Collectors.toList()); // Recolectar los resultados en una lista
+
+        logger.logPercentages(invariantPercentages);
     }
 }
 
