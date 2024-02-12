@@ -2,15 +2,14 @@ package pc.borbotones;
 
 import java.util.*;
 
-public class Logger {
-    private List<Integer> invariantsFiredList;
+public class DataController {
+
     private List<List<Integer>> invariantRegisterList;
     private List<Integer> invariantsCounterList;
 
-    public Logger() {
+    public DataController() {
         invariantRegisterList = new ArrayList<>();
         invariantsCounterList = Arrays.asList(0, 0, 0);
-        invariantsFiredList = Arrays.asList(0, 0, 0);
     }
 
     public void registerFire(Transition transition) {
@@ -21,8 +20,8 @@ public class Logger {
         }
     }
 
-    public List<Integer> getInvariantsFiredList() {
-        return invariantsFiredList;
+    public List<Integer> getInvariantsCounterList() {
+        return invariantsCounterList;
     }
 
     private void createNewRegister(Integer id) {
@@ -71,8 +70,11 @@ public class Logger {
                 invariantsCounterList.set(i, invariantsCounterList.get(i) + 1);
             }
         }
+        System.out.println("#######################");
+        for(int i = 0; i < invariantsCounterList.size(); i++){
+            System.out.println("Invariant " + (i+1) + " has been fired " + invariantsCounterList.get(i) + " times");
+        }
     }
-
 }
 
 
