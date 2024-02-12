@@ -38,6 +38,12 @@ public class RdpLoggerImpl implements RdpLogger {
         log(message.toString());
     }
 
+    public void logInvariants(List<Integer> invariantsCounterList) {
+        for(int i = 0; i < invariantsCounterList.size(); i++){
+            log("Invariant " + (i+1) + " has been fired " + invariantsCounterList.get(i) + " times");
+        }
+    }
+
     private String getLogClassFormat() {
         if (className != null) {
             return "[" + className + "]  ";

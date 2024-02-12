@@ -1,5 +1,7 @@
 package pc.borbotones;
 
+import pc.borbotones.exceptions.RdpException;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +50,7 @@ public class Transition implements Subscriber {
             }
         }
         else {
-            throw new IllegalStateException("Transition not enabled");
+            throw new RdpException("Transition not enabled: " + this.name);
         }
     }
 

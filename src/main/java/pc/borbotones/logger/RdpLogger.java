@@ -1,8 +1,10 @@
 package pc.borbotones.logger;
 
-import pc.borbotones.exceptions.RdpException;
+import java.util.List;
 
 public interface RdpLogger {
     void log(String message);
-    void log(Object ...messages) ;
+    void log(Object ...messages);
+
+    void logInvariants(List<Integer> invariantsCounterList);
 }

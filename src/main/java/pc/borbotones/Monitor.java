@@ -1,5 +1,7 @@
 package pc.borbotones;
 
+import pc.borbotones.exceptions.RdpException;
+
 import java.util.HashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -25,7 +27,7 @@ public class Monitor {
         this.enabled = true;
     }
 
-    public boolean requestFire(Transition transition) {
+    public boolean requestFire(Transition transition) throws RdpException {
         if(!enabled)
             return false;
         try {
@@ -46,11 +48,9 @@ public class Monitor {
                 throw new IllegalStateException("No transition available to fire, deadlock detected.");
 
         }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-        finally {
+        catch (InterruptedException | RdpException e) {
+            throw new RdpException("Error firing transition", e);
+        } finally {
             lock.unlock();
         }
         return true;

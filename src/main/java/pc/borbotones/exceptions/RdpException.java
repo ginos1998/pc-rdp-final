@@ -5,7 +5,7 @@ import pc.borbotones.logger.RdpLogger;
 
 import java.util.List;
 
-public class RdpException extends Exception {
+public class RdpException extends RuntimeException {
 
     private final RdpLogger logger = LoggerFactory.getLogger(RdpException.class);
 
