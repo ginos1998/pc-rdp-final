@@ -5,17 +5,21 @@ import pc.borbotones.logger.LoggerFactory;
 import pc.borbotones.logger.RdpLogger;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DataController {
 
     private List<List<Integer>> invariantRegisterList;
     private List<Integer> invariantsCounterList;
 
+    private List<Integer> invariantsRunningCounterList;
+
     private final RdpLogger logger = LoggerFactory.getLogger(DataController.class);
 
     public DataController() {
         invariantRegisterList = new ArrayList<>();
         invariantsCounterList = Arrays.asList(0, 0, 0);
+        invariantsRunningCounterList = Arrays.asList(0, 0, 0);
     }
 
     public void registerFire(Transition transition) {
@@ -30,10 +34,13 @@ public class DataController {
         return invariantsCounterList;
     }
 
+    public List<Integer> getInvariantsRunningCounterList(){return invariantsRunningCounterList;}
+
     private void createNewRegister(Integer id) {
         List<Integer> register = new ArrayList<>();
         register.add(id);
         invariantRegisterList.add(register);
+        updateRunningCounter(register);
     }
 
     public void addNewTransition(Transition transition) {
@@ -51,6 +58,7 @@ public class DataController {
                         .findFirst()
                         .ifPresent(reg -> {
                             reg.add(transition.getNumber());
+                            updateRunningCounter(reg);
                             incrementCounters(reg);
                         });
                 });
@@ -76,14 +84,35 @@ public class DataController {
             for(int i = 0; i< Config.T_INVARIANT_LIST.size();i++){
                 if (Config.T_INVARIANT_LIST.get(i).stream().allMatch(reg::contains)){
                     invariantsCounterList.set(i, invariantsCounterList.get(i) + 1);
+                    invariantRegisterList.remove(reg);
+                    invariantsRunningCounterList.set(i, invariantsRunningCounterList.get(i) - 1);
                 }
             }
-
             logger.logInvariants(invariantsCounterList);
         } catch (Exception e) {
             List<String> errors = Arrays.asList("Error incrementing counters", e.getMessage());
             throw new RdpException(e, errors);
         }
+    }
+    private void updateRunningCounter(List<Integer> reg){
+        if(reg.size() <= 2){
+            List<List<Integer>> filteredInvs = Config.T_INVARIANT_LIST.stream()
+                    .filter(inv -> inv.containsAll(reg))
+                    .collect(Collectors.toList());
+
+            if(filteredInvs.size()==1){
+                invariantsRunningCounterList.set(Config.T_INVARIANT_LIST.indexOf(filteredInvs.get(0)), invariantsRunningCounterList.get(Config.T_INVARIANT_LIST.indexOf(filteredInvs.get(0)))+1);
+            }
+        }
+    }
+
+    private void calculatePercentages(List<Integer> running){
+        // Calcular la suma total de invariantes en ejecución
+        int totalInvariants = invariantsRunningCounterList.stream().mapToInt(Integer::intValue).sum();
+        // Calcular el porcentaje de cada invariante usando stream
+        List<Double> invariantPercentages = invariantsRunningCounterList.stream()
+                .map(count -> ((double) count / totalInvariants) * 100) // Convertir a porcentaje
+                .collect(Collectors.toList()); // Recolectar los resultados en una lista
     }
 }
 
