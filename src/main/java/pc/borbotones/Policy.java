@@ -39,26 +39,25 @@ public class Policy {
     }
 
     public Transition next(List<Transition> availableTransitionsList) {
-        //List<Transition> availableTransitionsList = getAvailableTransitionsList();
-        List<Integer> orderedInvariantsCounterList = getOrderedInvariantsCounterList();
-        Transition transition = null;
 
-        //Collections.reverse(availableTransitionsList);
-        //return the transition with the min ammount of fires (getfires())
-        for (Transition t: availableTransitionsList) {
-            if (transition == null || t.getFires() < transition.getFires()) {
-                transition = t;
+        // Encuentra la cantidad mínima de disparos y el mínimo tiempo de espera inicial
+        Transition selectedTransition = availableTransitionsList.get(0);
+
+        for (int i = 1; i < availableTransitionsList.size(); i++) {
+            Transition currentTransition = availableTransitionsList.get(i);
+
+            // Comparar por cantidad de disparos
+            if (currentTransition.getFires() < selectedTransition.getFires()) {
+                selectedTransition = currentTransition;
+            }
+            // Si tienen la misma cantidad de disparos, comparar por tiempo de espera
+            else if (currentTransition.getFires() == selectedTransition.getFires()
+                    && currentTransition.waitingTime() < selectedTransition.waitingTime()) {
+                selectedTransition = currentTransition;
             }
         }
 
-        //for (Integer inv: orderedInvariantsCounterList) {
-        //    for (Transition t: availableTransitionsList) {
-        //        if (Config.T_INVARIANT_LIST.get(inv).contains(t.getNumber())){
-        //            return t;
-        //        }
-        //    }
-        //}
+        return selectedTransition;
 
-        return transition;
     }
 }

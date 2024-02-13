@@ -60,8 +60,13 @@ public class Transition implements Subscriber {
             timing = false;
     }
 
-    public long remainingTime(){
-        return (alfaTime - ( System.currentTimeMillis() - this.sensStart));
+    public long waitingTime(){
+        if(!this.timing)
+            return alfaTime;
+        if(!isTimed())
+            return 0;
+
+        return alfaTime - ( System.currentTimeMillis() - this.sensStart);
     }
 
     public boolean isTimed(){
@@ -108,7 +113,7 @@ public class Transition implements Subscriber {
             fires++;
         }
         else {
-           // throw new RdpException("Transition not enabled: " + this.name);
+            System.exit(1);
         }
     }
 
@@ -117,7 +122,10 @@ public class Transition implements Subscriber {
     }
 
     public boolean isEnabled() {
-            return getSensStatus() == Config.TRANSITION_STATES.SENSIBILIZED;
+            if(isTimed())
+                return getTimedStatus() == Config.TRANSITION_STATES.ON_WINDOW;
+            else
+                return getSensStatus() == Config.TRANSITION_STATES.SENSIBILIZED;
     }
 
     public String getName() {
