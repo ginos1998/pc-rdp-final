@@ -44,6 +44,12 @@ public class RdpLoggerImpl implements RdpLogger {
         }
     }
 
+    public void logPercentages(List<Double> invariantPercentages) {
+        for(int i = 0; i < invariantPercentages.size(); i++){
+            log("Invariant " + (i+1) + " has been fired " + invariantPercentages.get(i) + " % of the times");
+        }
+    }
+
     private String getLogClassFormat() {
         if (className != null) {
             return "[" + className + "]  ";

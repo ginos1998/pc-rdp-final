@@ -7,4 +7,6 @@ public interface RdpLogger {
     void log(Object ...messages);
 
     void logInvariants(List<Integer> invariantsCounterList);
+
+    void logPercentages(List<Double> invariantPercentages);
 }
