@@ -47,6 +47,7 @@ public class Monitor {
 
             transition.fire();
 
+
             next = policy.next(readyTransitions());
             transitions_queues.get(next).signal();
             dataController.registerFire(transition);

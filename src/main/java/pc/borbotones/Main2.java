@@ -72,7 +72,7 @@ public class Main2 {
         List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
 
         DataController dataController = new DataController();
-        Policy policy = new Policy(transitionList, placeList, dataController);
+        Policy policy = new Policy();
         Monitor monitor = new Monitor(transitionList, policy, dataController);
 
         connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
