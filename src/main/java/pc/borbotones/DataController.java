@@ -1,7 +1,7 @@
 package pc.borbotones;
 
-import pc.borbotones.exceptions.RdpException;
-import pc.borbotones.logger.LoggerFactory;
+//import pc.borbotones.exceptions.RdpException;
+//import pc.borbotones.logger.LoggerFactory;
 import pc.borbotones.logger.RdpLogger;
 
 import java.util.*;
@@ -11,7 +11,7 @@ public class DataController {
     private List<List<Integer>> invariantRegisterList;
     private List<Integer> invariantsCounterList;
 
-    private final RdpLogger logger = LoggerFactory.getLogger(DataController.class);
+    //private final RdpLogger logger = LoggerFactory.getLogger(DataController.class);
 
     public DataController() {
         invariantRegisterList = new ArrayList<>();
@@ -56,7 +56,7 @@ public class DataController {
                 });
         } catch (Exception e) {
             List<String> errors = Arrays.asList("Error adding new transition to register", e.getMessage());
-            throw new RdpException(e, errors);
+           // throw new RdpException(e, errors);
         }
     }
 
@@ -76,13 +76,17 @@ public class DataController {
             for(int i = 0; i< Config.T_INVARIANT_LIST.size();i++){
                 if (Config.T_INVARIANT_LIST.get(i).stream().allMatch(reg::contains)){
                     invariantsCounterList.set(i, invariantsCounterList.get(i) + 1);
+                    //System.out.println("#######################");
+                    //for(int j = 0; j < invariantsCounterList.size(); j++){
+                    //    System.out.println("Invariant " + (j+1) + " has been fired " + invariantsCounterList.get(j) + " times");
+                    //}
+
                 }
             }
-
-            logger.logInvariants(invariantsCounterList);
+            //logger.logInvariants(invariantsCounterList);
         } catch (Exception e) {
             List<String> errors = Arrays.asList("Error incrementing counters", e.getMessage());
-            throw new RdpException(e, errors);
+            //throw new RdpException(e, errors);
         }
     }
 }

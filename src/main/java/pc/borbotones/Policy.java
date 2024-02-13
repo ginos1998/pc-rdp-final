@@ -38,21 +38,26 @@ public class Policy {
              .collect(Collectors.toList());
     }
 
-    public Transition next(){
-        List<Transition> availableTransitionsList = getAvailableTransitionsList();
+    public Transition next(List<Transition> availableTransitionsList) {
+        //List<Transition> availableTransitionsList = getAvailableTransitionsList();
         List<Integer> orderedInvariantsCounterList = getOrderedInvariantsCounterList();
-
         Transition transition = null;
 
-        Collections.reverse(availableTransitionsList);
-
-        for (Integer inv: orderedInvariantsCounterList) {
-            for (Transition t: availableTransitionsList) {
-                if (Config.T_INVARIANT_LIST.get(inv).contains(t.getNumber())){
-                    return t;
-                }
+        //Collections.reverse(availableTransitionsList);
+        //return the transition with the min ammount of fires (getfires())
+        for (Transition t: availableTransitionsList) {
+            if (transition == null || t.getFires() < transition.getFires()) {
+                transition = t;
             }
         }
+
+        //for (Integer inv: orderedInvariantsCounterList) {
+        //    for (Transition t: availableTransitionsList) {
+        //        if (Config.T_INVARIANT_LIST.get(inv).contains(t.getNumber())){
+        //            return t;
+        //        }
+        //    }
+        //}
 
         return transition;
     }

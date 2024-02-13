@@ -19,7 +19,9 @@ public class Segment implements Runnable{
     public void run() {
         while(monitor.isEnabled()) {
             for (Transition transition : transitions) {
-                monitor.requestFire(transition);
+                boolean fired = false;
+                while(!fired)
+                    fired = monitor.requestFire(transition);
             }
         }
     }

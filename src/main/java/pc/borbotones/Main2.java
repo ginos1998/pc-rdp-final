@@ -27,6 +27,13 @@ public class Main2 {
         }
     }
 
+    public static void setTimedTransitions(List<Transition> transitionList) {
+        for (Transition t : transitionList) {
+            if (Config.TIMED_TRANSITIONS.containsKey(t.getName()))
+                t.becomeTimed(Config.TIMED_TRANSITIONS.get(t.getName()).get(0), Config.TIMED_TRANSITIONS.get(t.getName()).get(1));
+        }
+    }
+
     public static List<Segment> createSegments(List<Transition> transitionList, Monitor monitor) {
         List<Segment> segmentList = new ArrayList<>();
         for (int i = 0; i < Config.SEGMENTS.size(); i++) {
@@ -64,11 +71,12 @@ public class Main2 {
         List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name())).collect(Collectors.toList());
         List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
 
-        DataController log = new DataController();
-        Policy policy = new Policy(transitionList, placeList, log);
-        Monitor monitor = new Monitor(transitionList, policy, log);
+        DataController dataController = new DataController();
+        Policy policy = new Policy(transitionList, placeList, dataController);
+        Monitor monitor = new Monitor(transitionList, policy, dataController);
 
         connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
+        setTimedTransitions(transitionList);
         markInitial(placeList, Config.INITIAL_MARKING);
 
         List<Segment> segmentList = createSegments(transitionList, monitor);
