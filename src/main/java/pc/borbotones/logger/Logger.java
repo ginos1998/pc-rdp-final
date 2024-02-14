@@ -30,14 +30,14 @@ public class Logger {
     }
 
     public void log(String message) {
-        try {
-            String logClass = getLogClassFormat();
-            String logMessage = logClass + message;
-            logs.add(logMessage);
-            System.out.println(logMessage);
-        } catch (RdpException e) {
-            throw new RdpException("Error logging message. " + e.getMessage());
-        }
+        logs.add(info(message));
+    }
+
+    public String info(String message) {
+        String logClass = getLogClassFormat();
+        String logMessage = logClass + message;
+        System.out.println(logMessage);
+        return logMessage;
     }
 
     public void error(String message) {
@@ -103,5 +103,4 @@ public class Logger {
             throw new RdpException("Error clearing logs in file. " + e.getMessage());
         }
     }
-
 }

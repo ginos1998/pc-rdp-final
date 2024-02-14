@@ -91,7 +91,8 @@ public class Transition implements Subscriber {
             return Config.TRANSITION_STATES.ON_WINDOW;
         else
             System.out.println("Transition: " + this.name + " timed out" + " senseTime: " + senseTime + " alfaTime: " + alfaTime + " betaTime: " + betaTime);
-            return Config.TRANSITION_STATES.TIMED_OUT;
+
+        return Config.TRANSITION_STATES.TIMED_OUT;
     }
 
     public void update(int num_tokens, Place place) {

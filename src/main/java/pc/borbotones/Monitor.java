@@ -1,8 +1,5 @@
 package pc.borbotones;
 
-//import pc.borbotones.exceptions.RdpException;
-
-import pc.borbotones.exceptions.RdpException;
 import pc.borbotones.logger.Logger;
 
 import java.util.ArrayList;
