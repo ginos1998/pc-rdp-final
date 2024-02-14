@@ -12,10 +12,13 @@ public class Logger {
     private static Logger instance = null;
     private String className;
     private List<String> logs;
+    private long initialTime;
+    private long finalTime;
 
     private Logger() {
         this.logs = new ArrayList<>();
         this.className = this.getClass().getName();
+        this.initialTime = System.currentTimeMillis();
         clearLogsInFile();
     }
 
@@ -79,8 +82,11 @@ public class Logger {
     }
 
     public void writeLogsToFile() {
+        this.finalTime = System.currentTimeMillis();
+        long totalTime = this.finalTime - this.initialTime;
         try (FileWriter fileWriter = new FileWriter("log.txt", true)) {
             System.out.println("Writing logs to file...");
+            fileWriter.write("Logs from " + this.initialTime + " to " + this.finalTime + ". Total time: " + totalTime + "\n\n");
             for (String log : logs) {
                 fileWriter.write(log + "\n");
             }
