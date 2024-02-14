@@ -2,6 +2,9 @@ package pc.borbotones;
 
 //import pc.borbotones.exceptions.RdpException;
 
+import pc.borbotones.exceptions.RdpException;
+import pc.borbotones.logger.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +34,11 @@ public class Monitor {
     public boolean requestFire(Transition transition)  {
         if(!enabled)
             return false;
+
+        if (dataController.getTotalInvariants() == 1000) {
+            System.exit(0);
+        }
+
         try {
             lock.lock();
 
@@ -54,8 +62,7 @@ public class Monitor {
             return true;
         }
         catch (Exception e) {
-            e.printStackTrace();
-           System.exit(1);// throw new RdpException("Error firing transition", e);
+            Logger.getLogger().error("Error firing transition " + transition.getName());
         } finally {
             lock.unlock();
         }

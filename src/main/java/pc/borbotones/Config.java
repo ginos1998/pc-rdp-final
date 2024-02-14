@@ -16,9 +16,9 @@ public abstract class Config {
         put("T6",   new ArrayList<>(Arrays.asList(30, 1000)));
         put("T7",   new ArrayList<>(Arrays.asList(30, 1000)));
         put("T8",   new ArrayList<>(Arrays.asList(15, 1000)));
-        put("T10",  new ArrayList<>(Arrays.asList(1000, 2000)));
-        put("T11",  new ArrayList<>(Arrays.asList(1000, 2000)));
-        put("T12",  new ArrayList<>(Arrays.asList(1000, 2000)));
+        put("T10",  new ArrayList<>(Arrays.asList(200, 1000)));
+        put("T11",  new ArrayList<>(Arrays.asList(200, 1000)));
+        put("T12",  new ArrayList<>(Arrays.asList(000, 1000)));
     }};
 
     public enum PLACES {

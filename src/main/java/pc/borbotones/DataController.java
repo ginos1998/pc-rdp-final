@@ -12,6 +12,7 @@ public class DataController {
     private List<Integer> invariantsCounterList;
 
     private List<Integer> invariantsRunningCounterList;
+    private int totalInvariants;
 
 
     public DataController() {
@@ -39,6 +40,7 @@ public class DataController {
         register.add(id);
         invariantRegisterList.add(register);
         updateRunningCounter(register);
+        totalInvariants++;
     }
 
     public void addNewTransition(Transition transition) {
@@ -113,6 +115,10 @@ public class DataController {
                 .collect(Collectors.toList()); // Recolectar los resultados en una lista
 
         Logger.getLogger().logPercentages(invariantPercentages);
+    }
+
+    public int getTotalInvariants() {
+        return totalInvariants;
     }
 }
 
