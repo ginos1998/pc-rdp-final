@@ -1,5 +1,6 @@
 package pc.borbotones;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,41 +19,6 @@ public class Main {
         }
     }
 
-    public static void printState(List<Place> placeList, List<Transition> transitionList) {
-        placeList.forEach(p -> System.out.println(p.toString() + " has " + p.getNumTokens() + " tokens"));
-        transitionList.forEach(t -> System.out.println(t.getName() + " is enabled: " + t.isEnabled()));
-    }
-
-    public static void printInOuts(List<Transition> transitions) {
-        transitions.forEach(t -> {
-            System.out.println(t.getName() + " has inputs: " + t.getInput());
-            System.out.println(t.getName() + " has outputs: " + t.getOutput());
-            System.out.println();
-        });
-    }
-
-    private static void fireSequencesTest(List<Transition> transitions, DataController log) {
-        transitions.get(Config.TRANSITIONS.T1.ordinal()).fire();
-        System.out.println("\n" + "Fired T1" + "\n");
-        log.addNewTransition(transitions.get(Config.TRANSITIONS.T1.ordinal()));
-
-        transitions.get(Config.TRANSITIONS.T3.ordinal()).fire();
-        System.out.println("\n" + "Fired T3" + "\n");
-        log.addNewTransition(transitions.get(Config.TRANSITIONS.T3.ordinal()));
-
-        transitions.get(Config.TRANSITIONS.T5.ordinal()).fire();
-        System.out.println("\n" + "Fired T5" + "\n");
-        log.addNewTransition(transitions.get(Config.TRANSITIONS.T5.ordinal()));
-
-        transitions.get(Config.TRANSITIONS.T7.ordinal()).fire();
-        System.out.println("\n" + "Fired T7" + "\n");
-        log.addNewTransition(transitions.get(Config.TRANSITIONS.T7.ordinal()));
-
-        transitions.get(Config.TRANSITIONS.T8.ordinal()).fire();
-        System.out.println("\n" + "Fired T8" + "\n");
-        log.addNewTransition(transitions.get(Config.TRANSITIONS.T8.ordinal()));
-    }
-
     public static void markInitial(List<Place> placeList, int[] initial_marking) {
         for (int i = 0; i < initial_marking.length; i++) {
             for (int j = 0; j < initial_marking[i]; j++) {
@@ -61,20 +27,62 @@ public class Main {
         }
     }
 
-    public static void main(String[] args) {
-        DataController log = new DataController();
-        List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name())).collect(Collectors.toList());
-        List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
-        printState(placeList, transitionList);
-
-        connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
-        markInitial(placeList, Config.INITIAL_MARKING);
-
-        printInOuts(transitionList);
-        printState(placeList, transitionList);
-        fireSequencesTest(transitionList, log);
-
+    public static void setTimedTransitions(List<Transition> transitionList) {
+        for (Transition t : transitionList) {
+            if (Config.TIMED_TRANSITIONS.containsKey(t.getName()))
+                t.becomeTimed(Config.TIMED_TRANSITIONS.get(t.getName()).get(0), Config.TIMED_TRANSITIONS.get(t.getName()).get(1));
+        }
     }
 
+    public static List<Segment> createSegments(List<Transition> transitionList, Monitor monitor) {
+        List<Segment> segmentList = new ArrayList<>();
+        for (int i = 0; i < Config.SEGMENTS.size(); i++) {
+            List<Transition> transitionsInSegment = new ArrayList<>();
+            for (Transition t : transitionList) {
+                if (Config.SEGMENTS.get(i).contains(t.getNumber())) {
+                    transitionsInSegment.add(t);
+                }
+            }
+            Segment segment = new Segment("S" + i, transitionsInSegment, monitor);
+            segmentList.add(segment);
+        }
+        return segmentList;
+    }
+
+    public static List<Thread> createThreads(List<Segment> segmentList) {
+        List<Thread> threadList = new ArrayList<>();
+        for (int i = 0; i < segmentList.size(); i++) {
+            for (int n = 0; n < Config.SEGMENT_THREADS[i]; n++){
+                Thread thread = new Thread(segmentList.get(i), "T"+"S"+i+"-"+n);
+                threadList.add(thread);
+            }
+        }
+
+        return threadList;
+    }
+
+    public static void runThreads(List<Thread> threadList) {
+        for (Thread t : threadList) {
+            t.start();
+        }
+    }
+
+    public static void main(String[] args) {
+        List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name())).collect(Collectors.toList());
+        List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
+
+        DataController dataController = new DataController();
+        Policy policy = new Policy();
+        Monitor monitor = new Monitor(transitionList, policy, dataController);
+
+        connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
+        setTimedTransitions(transitionList);
+        markInitial(placeList, Config.INITIAL_MARKING);
+
+        List<Segment> segmentList = createSegments(transitionList, monitor);
+        List<Thread> trheadList = createThreads(segmentList);
+
+        runThreads(trheadList);
+    }
 
 }
