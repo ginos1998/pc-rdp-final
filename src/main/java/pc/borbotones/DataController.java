@@ -1,8 +1,7 @@
 package pc.borbotones;
 
 import pc.borbotones.exceptions.RdpException;
-import pc.borbotones.logger.LoggerFactory;
-import pc.borbotones.logger.RdpLogger;
+import pc.borbotones.logger.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,7 +13,6 @@ public class DataController {
 
     private List<Integer> invariantsRunningCounterList;
 
-    private final RdpLogger logger = LoggerFactory.getLogger(DataController.class);
 
     public DataController() {
         invariantRegisterList = new ArrayList<>();
@@ -88,7 +86,7 @@ public class DataController {
                     invariantsRunningCounterList.set(i, invariantsRunningCounterList.get(i) - 1);
                 }
             }
-            logger.logInvariants(invariantsCounterList);
+            Logger.getLogger().logInvariants(invariantsCounterList);
         } catch (Exception e) {
             List<String> errors = Arrays.asList("Error incrementing counters", e.getMessage());
             throw new RdpException(e, errors);
@@ -114,7 +112,7 @@ public class DataController {
                 .map(count -> ((double) count / totalInvariants) * 100) // Convertir a porcentaje
                 .collect(Collectors.toList()); // Recolectar los resultados en una lista
 
-        logger.logPercentages(invariantPercentages);
+        Logger.getLogger().logPercentages(invariantPercentages);
     }
 }
 

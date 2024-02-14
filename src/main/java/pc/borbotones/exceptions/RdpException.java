@@ -1,27 +1,25 @@
 package pc.borbotones.exceptions;
 
-import pc.borbotones.logger.LoggerFactory;
-import pc.borbotones.logger.RdpLogger;
+import pc.borbotones.logger.Logger;
 
 import java.util.List;
 
 public class RdpException extends RuntimeException {
 
-    private final RdpLogger logger = LoggerFactory.getLogger(RdpException.class);
 
     public RdpException(String message) {
         super(message);
-        logger.log(message);
+        Logger.getLogger().error(message);
     }
 
     public RdpException(String message, Throwable cause) {
         super(message, cause);
-        logger.log(message);
+        Logger.getLogger().error(message);
     }
 
     public RdpException(Throwable e, List<String> errors) {
         super(e);
-        logger.log(errors);
+        Logger.getLogger().error(errors);
     }
 
 }
