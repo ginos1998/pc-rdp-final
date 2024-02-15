@@ -32,12 +32,12 @@ public class Monitor {
         if(!enabled)
             return false;
 
-        if (dataController.getTotalInvariants() == 1000) {
-            System.exit(0);
-        }
-
         try {
             lock.lock();
+
+            if (dataController.getTotalInvariants() == 100) {
+                System.exit(0);
+            }
 
             while(!(transition.equals(next) && transition.isEnabled()) ) {
                 if(next == null && transition.isEnabled()) {
