@@ -1,5 +1,6 @@
 package pc.borbotones;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -69,10 +70,13 @@ public abstract class Config {
     public static final List<List<Integer>> P_INVARIANTS = Arrays.asList(
             Arrays.asList(1,2,3,4,5,6,7,4),
             Arrays.asList(8,9,10,11,4),
-            Arrays.asList(1,10,12,1),
+            Arrays.asList(1,10,12,2),
             Arrays.asList(2,3,9,13,2),
             Arrays.asList(4,5,8,14,3),
-            Arrays.asList(6,15,1)
+            Arrays.asList(6,15,1),
+            Arrays.asList(1,9,16,3),
+            Arrays.asList(2,3,8,17,4),
+            Arrays.asList(1,2,3,8,9,18,6)
         );
 
     public static enum TRANSITION_STATES {

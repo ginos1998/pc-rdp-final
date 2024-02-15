@@ -1,7 +1,6 @@
 package pc.borbotones;
 
 import pc.borbotones.logger.Logger;
-import sun.jvm.hotspot.types.CIntegerField;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -75,7 +74,7 @@ public class Main2 {
         pInvariants.forEach(inv -> {
             List<Integer> pInv = new ArrayList<>();
             places.forEach(p -> {
-                if(inv.indexOf(p) != inv.size()-1){
+                if(inv.contains(p.getNumber()) && inv.indexOf(p.getNumber()) != inv.size()-1){
                     pInv.add(p.getNumber());
                 }
             });
