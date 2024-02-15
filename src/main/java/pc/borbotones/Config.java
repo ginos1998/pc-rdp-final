@@ -70,4 +70,6 @@ public abstract class Config {
         SENSIBILIZED, NOT_SENSIBILIZED, TIMED_OUT, UNDER_WINDOW, ON_WINDOW
     }
 
+    public static final int MAX_TRANSITIONS = 1000;
+
 }

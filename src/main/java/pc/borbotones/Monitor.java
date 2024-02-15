@@ -35,7 +35,7 @@ public class Monitor {
         try {
             lock.lock();
 
-            if (dataController.getTotalInvariants() == 100) {
+            if (dataController.getTotalInvariants() == Config.MAX_TRANSITIONS) {
                 System.exit(0);
             }
 
