@@ -4,6 +4,7 @@ import pc.borbotones.exceptions.RdpException;
 import pc.borbotones.logger.Logger;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class DataController {
@@ -39,7 +40,7 @@ public class DataController {
         List<Integer> register = new ArrayList<>();
         register.add(id);
         invariantRegisterList.add(register);
-        updateRunningCounter(register);
+        //updateRunningCounter(register);
         totalInvariants++;
     }
 
@@ -58,7 +59,7 @@ public class DataController {
                         .findFirst()
                         .ifPresent(reg -> {
                             reg.add(transition.getNumber());
-                            updateRunningCounter(reg);
+                            //updateRunningCounter(reg);
                             incrementCounters(reg);
                         });
                 });
@@ -106,7 +107,7 @@ public class DataController {
         }
     }
 
-    private void calculatePercentages(List<Integer> running){
+    private void calculatePercentages(List<Integer> invariants){
         // Calcular la suma total de invariantes en ejecución
         int totalInvariants = invariantsRunningCounterList.stream().mapToInt(Integer::intValue).sum();
         // Calcular el porcentaje de cada invariante usando stream
@@ -115,6 +116,19 @@ public class DataController {
                 .collect(Collectors.toList()); // Recolectar los resultados en una lista
 
         Logger.getLogger().logPercentages(invariantPercentages);
+    }
+
+    public boolean checkPInvariants(HashMap<List<Integer>, Integer> pInvariants){
+        AtomicBoolean checkPassed = new AtomicBoolean(true);
+        pInvariants.keySet().forEach(inv -> {
+            // Suma de elementos utilizando reduce
+            int suma = inv.stream()
+                    .reduce(0, (subtotal, elemento) -> subtotal + elemento);
+            if(pInvariants.get(inv) != suma){
+                checkPassed.set(false);
+            }
+        });
+        return checkPassed.get();
     }
 
     public int getTotalInvariants() {

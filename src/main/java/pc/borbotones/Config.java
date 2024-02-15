@@ -66,6 +66,15 @@ public abstract class Config {
             { -1,  0,  0,  1,  1,  0,  0,  0, -1,  0,  1,  0}, //CS3
     };
 
+    public static final List<List<Integer>> P_INVARIANTS = Arrays.asList(
+            Arrays.asList(1,2,3,4,5,6,7,4),
+            Arrays.asList(8,9,10,11,4),
+            Arrays.asList(1,10,12,1),
+            Arrays.asList(2,3,9,13,2),
+            Arrays.asList(4,5,8,14,3),
+            Arrays.asList(6,15,1)
+        );
+
     public static enum TRANSITION_STATES {
         SENSIBILIZED, NOT_SENSIBILIZED, TIMED_OUT, UNDER_WINDOW, ON_WINDOW
     }

@@ -5,11 +5,13 @@ import java.util.List;
 
 public class Place {
     private String name;
+    private int number;
     private int num_tokens;
     List<Subscriber> subscribers;
 
-    public Place(String name) {
+    public Place(String name, int number) {
         this.name = name;
+        this.number = number;
         this.num_tokens = 0;
         this.subscribers = new java.util.ArrayList<>();
     }
@@ -40,6 +42,10 @@ public class Place {
 
     public int getNumTokens() {
         return this.num_tokens;
+    }
+
+    public int getNumber(){
+        return this.number;
     }
 
     public String toString() {
