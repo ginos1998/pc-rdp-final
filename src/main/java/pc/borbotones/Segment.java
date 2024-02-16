@@ -2,9 +2,9 @@ package pc.borbotones;
 import java.util.List;
 
 public class Segment implements Runnable{
-    private String name;
-    private List<Transition> transitions;
-    private Monitor monitor;
+    private final String name;
+    private final List<Transition> transitions;
+    private final Monitor monitor;
 
     public Segment(String name,List<Transition> transitions, Monitor monitor) {
         this.name = name;
@@ -17,7 +17,7 @@ public class Segment implements Runnable{
     }
 
     public void run() {
-        while(monitor.isEnabled()) {
+        while(true) {
             for (Transition transition : transitions) {
                 boolean fired = false;
                 while(!fired)
