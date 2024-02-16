@@ -1,11 +1,13 @@
-package pc.borbotones;
+package pc.borbotones.Policies;
+
+import pc.borbotones.Transition;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-public class Policy {
-    public Policy() {}
+public class Policy1 extends Policy {
+    public Policy1() {}
 
+    @Override
     public Transition next(List<Transition> availableTransitionsList) {
         // Encuentra la cantidad mínima de disparos y el mínimo tiempo de espera inicial
         Transition selectedTransition = availableTransitionsList.get(0);
