@@ -1,14 +1,20 @@
 import re
 
 def get_transitions():
+    time_str = ""
     transiciones_contador = {'T' + str(i): 0 for i in range(1, 13)}
 
     tiempos = []
 
     patron_transicion = re.compile(r'(\d+) Transition (T\d+) fired')
 
+    first_line = True
     with open('../log.txt', 'r') as archivo:
         for linea in archivo:
+            if first_line:
+                time_str = linea
+                first_line = False
+
             coincidencia = patron_transicion.search(linea)
             if coincidencia:
                 tiempo = int(coincidencia.group(1))
@@ -24,6 +30,7 @@ def get_transitions():
 
         promedios = {transicion: contador / intervalos_100ms for transicion, contador in transiciones_contador.items()}
 
+        print(time_str)
         print("Conteo total de disparos por transición:")
         for transicion, contador in transiciones_contador.items():
             print(f"{transicion}: {contador} veces disparada")
