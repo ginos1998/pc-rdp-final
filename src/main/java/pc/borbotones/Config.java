@@ -1,25 +1,44 @@
 package pc.borbotones;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
 public abstract class Config {
     public enum TRANSITIONS {
         T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
     }
 
+    public  static  final HashMap<String, ArrayList<Integer>> TIMED_TRANSITIONS = new HashMap<String, ArrayList<Integer>>(){{
+        put("T4",   new ArrayList<>(Arrays.asList(20, 1000)));
+        put("T5",   new ArrayList<>(Arrays.asList(20, 1000)));
+        put("T6",   new ArrayList<>(Arrays.asList(30, 1000)));
+        put("T7",   new ArrayList<>(Arrays.asList(30, 1000)));
+        put("T8",   new ArrayList<>(Arrays.asList(15, 1000)));
+        put("T10",  new ArrayList<>(Arrays.asList(100, 1000)));
+        put("T11",  new ArrayList<>(Arrays.asList(100, 1000)));
+        put("T12",  new ArrayList<>(Arrays.asList(100, 1000)));
+    }};
+
     public enum PLACES {
         P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, Cs1, Cs2, Cs3
     }
 
-    public static final int [][] T_INVARIANTS_INT = {
-            {1,2,4,6,8},
-            {1,3,5,7,8},
-            {9,10,11,12}
-    };
+    public static final List<List<Integer>> T_INVARIANT_LIST = Arrays.asList(
+            Arrays.asList(1,2,4,6,8),
+            Arrays.asList(1,3,5,7,8),
+            Arrays.asList(9,10,11,12)
+    );
 
-    public static final boolean[][] T_INVARIANTS = {
-        { true, true, false, true, false, true, false, true, false, false, false, false },
-        { true, false, true, false, true, false, true, true, false, false, false, false },
-        { false, false, false, false, false, false, false, false, true, true, true, true }
-    };
+    public static final List<List<Integer>> SEGMENTS = Arrays.asList(
+            Arrays.asList(9,10,11,12),
+            Arrays.asList(1),
+            Arrays.asList(2, 4,6),
+            Arrays.asList(3,5,7),
+            Arrays.asList(8)
+    );
+    public static final int[] SEGMENT_THREADS = { 4, 2, 4,4,1 };
 
     public static final int[] INITIAL_MARKING = {0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 2, 2, 3, 1, 3, 4, 6};
 
@@ -40,9 +59,24 @@ public abstract class Config {
             {  0, -1, -1,  1,  1,  0,  0,  0,  0, -1,  1,  0}, //P13
             {  0,  0,  0, -1, -1,  1,  1,  0, -1,  1,  0,  0}, //P14
             {  0,  0,  0,  0,  0, -1, -1,  1,  0,  0,  0,  0}, //P15
-            { -1,  1,  1,  0,  0,  0,  0,  0, -1, -1,  1,  0}, //CS1
+            { -1,  1,  1,  0,  0,  0,  0,  0,  0, -1,  1,  0}, //CS1
             {  0, -1, -1,  1,  1,  0,  0,  0, -1,  1,  0,  0}, //CS2
-            { -1,  0,  0,  1,  1,  0,  0,  0,  0,  0,  1,  0}, //CS3
+            { -1,  0,  0,  1,  1,  0,  0,  0, -1,  0,  1,  0}, //CS3
     };
+
+    public static final List<List<Integer>> P_INVARIANTS = Arrays.asList(
+            Arrays.asList(1,2,3,4,5,6,7,4),
+            Arrays.asList(8,9,10,11,4),
+            Arrays.asList(1,10,12,2),
+            Arrays.asList(2,3,9,13,2),
+            Arrays.asList(4,5,8,14,3),
+            Arrays.asList(6,15,1),
+            Arrays.asList(1,9,16,3),
+            Arrays.asList(2,3,8,17,4),
+            Arrays.asList(1,2,3,8,9,18,6)
+        );
+
+
+    public static final int MAX_INVARIANTS = 1000;
 
 }

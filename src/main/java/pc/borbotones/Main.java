@@ -1,90 +1,109 @@
 package pc.borbotones;
+import pc.borbotones.Policies.Policy;
+import pc.borbotones.Policies.Policy2;
+import pc.borbotones.logger.Logger;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
 
-    public static void createPetriNet(Place[] places, Transition[] transitions) {
-        for (Config.PLACES place : Config.PLACES.values()) {
-            places[place.ordinal()] = new Place(place.name());
-        }
-        for (Config.TRANSITIONS transition : Config.TRANSITIONS.values()) {
-            transitions[transition.ordinal()] = new Transition(transition.name());
-        }
-    }
-
-    public static void connect_elements(Place[] places, Transition[] transitions, int[][] incidence_matrix) {
-        for (int p = 0; p < incidence_matrix.length; p++) {
-            for (int t = 0; t < incidence_matrix[p].length; t++) {
-                if (incidence_matrix[p][t] == 1) {
-                    transitions[t].addOutput(places[p]);
-                } else if (incidence_matrix[p][t] == -1) {
-                    transitions[t].addInput(places[p]);
+    public static void connectElements(List<Place> placeList, List<Transition> transitionList, int[][] incidenceMatrix) {
+        for (int p = 0; p < incidenceMatrix.length; p++) {
+            for (int t = 0; t < incidenceMatrix[p].length; t++) {
+                if (incidenceMatrix[p][t] == 1) {
+                    transitionList.get(t).addOutput(placeList.get(p));
+                } else if (incidenceMatrix[p][t] == -1) {
+                    transitionList.get(t).addInput(placeList.get(p));
                 }
             }
         }
     }
 
-    public static void mark_initial(Place[] places, int[] initial_marking) {
+    public static void markInitial(List<Place> placeList, int[] initial_marking) {
         for (int i = 0; i < initial_marking.length; i++) {
             for (int j = 0; j < initial_marking[i]; j++) {
-                places[i].addToken();
+                placeList.get(i).addToken();
             }
         }
     }
 
-    public static void print_state(Place[] places, Transition[] transitions) {
-        for (Place place : places) {
-            System.out.println(place.toString() + " has " + place.getNumTokens() + " tokens");
-        }
-        for (Transition transition : transitions) {
-            System.out.println(transition.getName() + " is enabled: " + transition.isEnabled());
+    public static void setTimedTransitions(List<Transition> transitionList) {
+        for (Transition t : transitionList) {
+            if (Config.TIMED_TRANSITIONS.containsKey(t.getName()))
+                t.becomeTimed(Config.TIMED_TRANSITIONS.get(t.getName()).get(0), Config.TIMED_TRANSITIONS.get(t.getName()).get(1));
         }
     }
 
-    public static void print_in_outs(Transition[] transitions) {
-        for (Transition transition : transitions) {
-            System.out.println(transition.getName() + " has inputs: " + transition.getInput());
-            System.out.println(transition.getName() + " has outputs: " + transition.getOutput());
-            System.out.println();
+    public static List<Segment> createSegments(List<Transition> transitionList, Monitor monitor) {
+        List<Segment> segmentList = new ArrayList<>();
+        for (int i = 0; i < Config.SEGMENTS.size(); i++) {
+            List<Transition> transitionsInSegment = new ArrayList<>();
+            for (Transition t : transitionList) {
+                if (Config.SEGMENTS.get(i).contains(t.getNumber())) {
+                    transitionsInSegment.add(t);
+                }
+            }
+            Segment segment = new Segment("S" + i, transitionsInSegment, monitor);
+            segmentList.add(segment);
+        }
+        return segmentList;
+    }
+
+    public static List<Thread> createThreads(List<Segment> segmentList) {
+        List<Thread> threadList = new ArrayList<>();
+        for (int i = 0; i < segmentList.size(); i++) {
+            for (int n = 0; n < Config.SEGMENT_THREADS[i]; n++){
+                Thread thread = new Thread(segmentList.get(i), "T"+"S"+i+"-"+n);
+                threadList.add(thread);
+            }
+        }
+
+        return threadList;
+    }
+
+    public static void runThreads(List<Thread> threadList) {
+        for (Thread t : threadList) {
+            t.start();
         }
     }
 
-    private static void fireSequenceTest(Transition[] transitions, Logger log){
-        transitions[Config.TRANSITIONS.T1.ordinal()].fire();
-        System.out.println("\n" + "Fired T1" + "\n");
-        log.addTransition(transitions[Config.TRANSITIONS.T1.ordinal()]);
-
-        transitions[Config.TRANSITIONS.T3.ordinal()].fire();
-        System.out.println("\n" + "Fired T3" + "\n");
-        log.addTransition(transitions[Config.TRANSITIONS.T3.ordinal()]);
-
-        transitions[Config.TRANSITIONS.T5.ordinal()].fire();
-        System.out.println("\n" + "Fired T5" + "\n");
-        log.addTransition(transitions[Config.TRANSITIONS.T5.ordinal()]);
-
-        transitions[Config.TRANSITIONS.T7.ordinal()].fire();
-        System.out.println("\n" + "Fired T7" + "\n");
-        log.addTransition(transitions[Config.TRANSITIONS.T7.ordinal()]);
-
-        transitions[Config.TRANSITIONS.T8.ordinal()].fire();
-        System.out.println("\n" + "Fired T8" + "\n");
-        log.addTransition(transitions[Config.TRANSITIONS.T8.ordinal()]);
+    public static void setPInvariants(List<List<Integer>> pInvariants, List<Place> places, HashMap<List<Integer>, Integer> map){
+        pInvariants.forEach(inv -> {
+            List<Integer> pInv = new ArrayList<>();
+            places.forEach(p -> {
+                if(inv.contains(p.getNumber()) && inv.indexOf(p.getNumber()) != inv.size()-1){
+                    pInv.add(p.getNumber());
+                }
+            });
+            map.put(pInv, inv.get(inv.size()-1));
+        });
     }
+
     public static void main(String[] args) {
-        Logger log = new Logger();
-        Place[] places = new Place[Config.PLACES.values().length];
-        Transition[] transitions = new Transition[Config.TRANSITIONS.values().length];
-        createPetriNet(places, transitions);
-        connect_elements(places, transitions, Config.INCIDENCE_MATRIX);
-        mark_initial(places, Config.INITIAL_MARKING);
-        // test the Petri net
-        for(int i=0; i< transitions.length;i++){
-            transitions[i].setNumber(i+1);
-        }
-        print_in_outs(transitions);
-        print_state(places, transitions);
-        fireSequenceTest(transitions, log);
-        print_state(places, transitions);
-    }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> Logger.getLogger().writeLogsToFile()));
 
+        Logger.getLogger();
+        HashMap<List<Integer>, Integer> pInvariants = new HashMap<>();
+        List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name(), p.ordinal()+1)).collect(Collectors.toList());
+        List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
+
+        setPInvariants(Config.P_INVARIANTS, placeList, pInvariants);
+        DataController dataController = new DataController();
+        Policy policy = new Policy2(dataController);
+        Monitor monitor = new Monitor(transitionList, policy, dataController, pInvariants, placeList);
+
+        connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
+        setTimedTransitions(transitionList);
+        markInitial(placeList, Config.INITIAL_MARKING);
+
+        List<Segment> segmentList = createSegments(transitionList, monitor);
+        List<Thread> trheadList = createThreads(segmentList);
+
+        runThreads(trheadList);
+    }
 
 }
