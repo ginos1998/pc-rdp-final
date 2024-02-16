@@ -85,7 +85,7 @@ public class DataController {
             for(int i = 0; i< Config.T_INVARIANT_LIST.size();i++){
                 if (Config.T_INVARIANT_LIST.get(i).stream().allMatch(reg::contains)){
                     invariantsCounterList.set(i, invariantsCounterList.get(i) + 1);
-                    invariantRegisterList.remove(reg);
+                    //invariantRegisterList.remove(reg);
                     invariantsRunningCounterList.set(i, invariantsRunningCounterList.get(i) - 1);
                 }
             }
