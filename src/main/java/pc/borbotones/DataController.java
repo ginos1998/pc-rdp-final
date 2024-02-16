@@ -85,7 +85,7 @@ public class DataController {
             for(int i = 0; i< Config.T_INVARIANT_LIST.size();i++){
                 if (Config.T_INVARIANT_LIST.get(i).stream().allMatch(reg::contains)){
                     invariantsCounterList.set(i, invariantsCounterList.get(i) + 1);
-                    invariantRegisterList.remove(reg);
+                    //invariantRegisterList.remove(reg);
                     invariantsRunningCounterList.set(i, invariantsRunningCounterList.get(i) - 1);
                 }
             }
@@ -109,7 +109,8 @@ public class DataController {
 
     private void calculatePercentages(List<Integer> invariants){
         // Calcular la suma total de invariantes en ejecución
-        int totalInvariants = invariantsRunningCounterList.stream().mapToInt(Integer::intValue).sum();
+        //int totalInvariants = invariantsRunningCounterList.stream().mapToInt(Integer::intValue).sum();
+        int totalInvariants = invariantsCounterList.size();
         // Calcular el porcentaje de cada invariante usando stream
         List<Double> invariantPercentages = invariantsRunningCounterList.stream()
                 .map(count -> ((double) count / totalInvariants) * 100) // Convertir a porcentaje
