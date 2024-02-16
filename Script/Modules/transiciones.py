@@ -7,7 +7,7 @@ def get_transitions():
 
     patron_transicion = re.compile(r'(\d+) Transition (T\d+) fired')
 
-    with open('/home/agustin/Desktop/Concurrente/pc-rdp-final/log.txt', 'r') as archivo:
+    with open('../log.txt', 'r') as archivo:
         for linea in archivo:
             coincidencia = patron_transicion.search(linea)
             if coincidencia:

@@ -15,7 +15,7 @@ def get_invariants():
 
     patron_transicion = re.compile(r'(\d+) Transition (T\d+) fired')
 
-    with open('/home/agustin/Desktop/Concurrente/pc-rdp-final/log.txt', 'r') as archivo:
+    with open('../log.txt', 'r') as archivo:
         for linea in archivo:
             # Buscar las coincidencias con el patrón de transición y tiempo
             coincidencia = patron_transicion.search(linea)
