@@ -109,7 +109,8 @@ public class DataController {
 
     private void calculatePercentages(List<Integer> invariants){
         // Calcular la suma total de invariantes en ejecución
-        int totalInvariants = invariantsRunningCounterList.stream().mapToInt(Integer::intValue).sum();
+        //int totalInvariants = invariantsRunningCounterList.stream().mapToInt(Integer::intValue).sum();
+        int totalInvariants = invariantsCounterList.size();
         // Calcular el porcentaje de cada invariante usando stream
         List<Double> invariantPercentages = invariantsRunningCounterList.stream()
                 .map(count -> ((double) count / totalInvariants) * 100) // Convertir a porcentaje
