@@ -10,14 +10,12 @@ import java.util.List;
 
 public class Logger {
     private static Logger instance = null;
-    private String className;
     private List<String> logs;
     private long initialTime;
     private long finalTime;
 
     private Logger() {
         this.logs = new ArrayList<>();
-        this.className = this.getClass().getName();
         this.initialTime = System.currentTimeMillis();
         clearLogsInFile();
     }
@@ -74,11 +72,7 @@ public class Logger {
     }
 
     private String getLogClassFormat() {
-        String currentTime = String.valueOf(System.currentTimeMillis());
-        if (className != null) {
-            return "[" + currentTime + " " + className + "]  ";
-        }
-        return "[" + currentTime + " " + Logger.class.getName() + "]  ";
+        return System.currentTimeMillis() + " ";
     }
 
     public void writeLogsToFile() {
