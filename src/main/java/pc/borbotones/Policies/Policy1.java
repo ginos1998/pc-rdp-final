@@ -1,11 +1,16 @@
 package pc.borbotones.Policies;
 
+import pc.borbotones.DataController;
 import pc.borbotones.Transition;
 
 import java.util.*;
 
 public class Policy1 extends Policy {
-    public Policy1() {}
+    private DataController dataController;
+
+    public Policy1(DataController dataController) {
+        super(dataController);
+    }
 
     @Override
     public Transition next(List<Transition> availableTransitionsList) {
