@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public abstract class Policy {
     protected DataController dataController;
 
-    public Policy(DataController dataController) {
+    protected Policy(DataController dataController) {
         this.dataController = dataController;
     }
 
