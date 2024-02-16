@@ -19,7 +19,6 @@ public class Monitor {
     private Transition next;
     private final Policy policy;
     private final DataController dataController;
-    private boolean enabled;
 
     public Monitor(List<Transition> transitions, Policy policy, DataController dataController, HashMap<List<Integer>, Integer> pInvariants, List<Place> placeList) {
         this.lock = new ReentrantLock(true);
@@ -31,17 +30,13 @@ public class Monitor {
         this.placeList = placeList;
         this.dataController = dataController;
         this.policy = policy;
-        this.enabled = true;
     }
 
     public boolean requestFire(Transition transition)  {
-        if(!enabled)
-            return false;
-
         try {
             lock.lock();
 
-            if (dataController.getTotalInvariants() == Config.MAX_TRANSITIONS) {
+            if (dataController.getTotalInvariants() == Config.MAX_INVARIANTS) {
                 System.exit(0);
             }
 
@@ -75,20 +70,12 @@ public class Monitor {
     }
 
     private List<Transition> readyTransitions() {
-        List<Transition> readyTransitions = new ArrayList<Transition>();
+        List<Transition> readyTransitions = new ArrayList<>();
         for (Transition transition : transitions_queues.keySet()){
-            if(transition.getSensStatus() == Config.TRANSITION_STATES.SENSIBILIZED){
+            if(transition.isSensed()){
                 readyTransitions.add(transition);
             }
         }
         return  readyTransitions;
-    }
-
-    public void disable() {
-        enabled = false;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
     }
 }

@@ -1,6 +1,5 @@
 package pc.borbotones;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,8 +24,6 @@ public abstract class Config {
     public enum PLACES {
         P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, Cs1, Cs2, Cs3
     }
-
-    public static final List<String> ACTIVITY_PLACES = Arrays.asList("P1", "P2", "P3", "P4", "P5", "P6", "P8", "P9", "P10");
 
     public static final List<List<Integer>> T_INVARIANT_LIST = Arrays.asList(
             Arrays.asList(1,2,4,6,8),
@@ -79,10 +76,7 @@ public abstract class Config {
             Arrays.asList(1,2,3,8,9,18,6)
         );
 
-    public static enum TRANSITION_STATES {
-        SENSIBILIZED, NOT_SENSIBILIZED, TIMED_OUT, UNDER_WINDOW, ON_WINDOW
-    }
 
-    public static final int MAX_TRANSITIONS = 100;
+    public static final int MAX_INVARIANTS = 1000;
 
 }

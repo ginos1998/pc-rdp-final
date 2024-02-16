@@ -4,7 +4,7 @@ import pc.borbotones.Config;
 import pc.borbotones.DataController;
 import pc.borbotones.Transition;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 public class Policy2 extends Policy{
     public Policy2(DataController dataController) {
