@@ -74,7 +74,7 @@ public class Main {
         pInvariants.forEach(inv -> {
             List<Integer> pInv = new ArrayList<>();
             places.forEach(p -> {
-                if(inv.indexOf(p) != inv.size()-1){
+                if(inv.contains(p.getNumber()) && inv.indexOf(p.getNumber()) != inv.size()-1){
                     pInv.add(p.getNumber());
                 }
             });
@@ -85,8 +85,9 @@ public class Main {
     public static void main(String[] args) {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> Logger.getLogger().writeLogsToFile()));
 
+        Logger.getLogger();
         HashMap<List<Integer>, Integer> pInvariants = new HashMap<>();
-        List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name(),p.ordinal()+1)).collect(Collectors.toList());
+        List<Place> placeList = Arrays.stream(Config.PLACES.values()).map(p -> new Place(p.name(), p.ordinal()+1)).collect(Collectors.toList());
         List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
 
         setPInvariants(Config.P_INVARIANTS, placeList, pInvariants);
