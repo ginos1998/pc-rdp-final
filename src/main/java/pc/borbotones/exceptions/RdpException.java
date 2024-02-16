@@ -10,6 +10,7 @@ public class RdpException extends RuntimeException {
     public RdpException(String message) {
         super(message);
         Logger.getLogger().error(message);
+        System.exit(1);
     }
 
     public RdpException(String message, Throwable cause) {

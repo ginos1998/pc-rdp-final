@@ -92,7 +92,7 @@ public class Main {
         setPInvariants(Config.P_INVARIANTS, placeList, pInvariants);
         DataController dataController = new DataController();
         Policy policy = new Policy();
-        Monitor monitor = new Monitor(transitionList, policy, dataController, pInvariants);
+        Monitor monitor = new Monitor(transitionList, policy, dataController, pInvariants, placeList);
 
         connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
         setTimedTransitions(transitionList);

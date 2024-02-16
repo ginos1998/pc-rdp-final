@@ -118,12 +118,18 @@ public class DataController {
         Logger.getLogger().logPercentages(invariantPercentages);
     }
 
-    public boolean checkPInvariants(HashMap<List<Integer>, Integer> pInvariants){
+    public boolean checkPInvariants(HashMap<List<Integer>, Integer> pInvariants, List<Place> placeList){
         AtomicBoolean checkPassed = new AtomicBoolean(true);
         pInvariants.keySet().forEach(inv -> {
             // Suma de elementos utilizando reduce
-            int suma = inv.stream()
+            List<Integer> tokens = placeList.stream()
+                    .filter(t -> inv.contains(t.getNumber()))
+                    .map(Place::getNumTokens)
+                    .collect(Collectors.toList());
+
+            int suma = tokens.stream()
                     .reduce(0, (subtotal, elemento) -> subtotal + elemento);
+
             if(pInvariants.get(inv) != suma){
                 checkPassed.set(false);
             }
