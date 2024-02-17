@@ -1,21 +1,8 @@
 import re
 
-def get_invariants():
-    transiciones_contador = {'T' + str(i): 0 for i in range(1, 13)}
-
-    tiempos = []
-
-    invariantes = [
-        [1, 2, 4, 6, 8],
-        [1, 3, 5, 7, 8],
-        [9, 10, 11, 12]
-    ]
-
-    invariantes_contador = [0 for _ in invariantes]
-
-    patron_transicion = re.compile(r'(\d+) Transition (T\d+) fired')
-
-    with open('../log.txt', 'r') as archivo:
+def get_transitions(path, patron_transicion, transiciones_contador, tiempos, secuencia) -> str:
+    # Abrir y leer el archivo
+    with open(path, 'r') as archivo:
         for linea in archivo:
             # Buscar las coincidencias con el patrón de transición y tiempo
             coincidencia = patron_transicion.search(linea)
@@ -24,14 +11,27 @@ def get_invariants():
                 transicion = coincidencia.group(2)
                 tiempos.append(tiempo)
                 transiciones_contador[transicion] += 1
+                secuencia += transicion
 
-    total_disparos = sum(transiciones_contador.values())
+    # Calcular el rango total de tiempo y dividirlo por 100 para obtener los intervalos de 100 ms
+    if tiempos:
+        tiempo_minimo = min(tiempos)
+        tiempo_maximo = max(tiempos)
+        rango_total_ms = tiempo_maximo - tiempo_minimo
+        intervalos_100ms = rango_total_ms / 100.0
 
-    for i, invariante in enumerate(invariantes):
-        invariantes_contador[i] = min([transiciones_contador['T' + str(t)] for t in invariante])
+        # Calcular el promedio de disparos cada 100 ms para cada transición
+        promedios = {transicion: contador / intervalos_100ms for transicion, contador in transiciones_contador.items()}
 
-    invariantes_porcentaje = [(contador / total_disparos * 100) if total_disparos > 0 else 0 for contador in invariantes_contador]
+        # Imprimir el resultado
+        print("Conteo total de disparos por transición:")
+        for transicion, contador in transiciones_contador.items():
+            print(f"{transicion}: {contador} veces disparada")
 
-    print("\nEjecuciones por invariante y su porcentaje respecto al total de disparos:")
-    for i, (contador, porcentaje) in enumerate(zip(invariantes_contador, invariantes_porcentaje)):
-        print(f"Invariante {i+1}: {contador} veces ejecutado, {porcentaje:.2f}% del total de disparos")
+        print("\nPromedio de disparos cada 100 ms por transición:")
+        for transicion, promedio in promedios.items():
+            print(f"{transicion}: {promedio:.2f} disparos cada 100 ms")
+    else:
+        print("No se encontraron tiempos de disparo en el archivo.")
+
+    return secuencia
