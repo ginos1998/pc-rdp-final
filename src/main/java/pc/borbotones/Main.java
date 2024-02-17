@@ -11,7 +11,16 @@ import java.util.stream.Collectors;
 
 public class Main {
 
-    public static void connectElements(List<Place> placeList, List<Transition> transitionList, int[][] incidenceMatrix) {
+    /**
+     * Connects places and transitions using the incidence matrix.
+     * If the value in the incidence matrix is 1, the place is an output of the transition.
+     * If the value in the incidence matrix is -1, the place is an input of the transition.
+     * Otherwise, the place is not connected to the transition.
+     * @param placeList places
+     * @param transitionList transitions
+     * @param incidenceMatrix incidence matrix
+     */
+    public static void connectPlacesAndTransitions(List<Place> placeList, List<Transition> transitionList, int[][] incidenceMatrix) {
         for (int p = 0; p < incidenceMatrix.length; p++) {
             for (int t = 0; t < incidenceMatrix[p].length; t++) {
                 if (incidenceMatrix[p][t] == 1) {
@@ -23,14 +32,23 @@ public class Main {
         }
     }
 
-    public static void markInitial(List<Place> placeList, int[] initial_marking) {
-        for (int i = 0; i < initial_marking.length; i++) {
-            for (int j = 0; j < initial_marking[i]; j++) {
+    /**
+     * Adds tokens to the places according to the initial marking.
+     * @param placeList places
+     * @param initialMarkingList initial marking
+     */
+    public static void addInitialMarksToPlaces(List<Place> placeList, int[] initialMarkingList) {
+        for (int i = 0; i < initialMarkingList.length; i++) {
+            for (int j = 0; j < initialMarkingList[i]; j++) {
                 placeList.get(i).addToken();
             }
         }
     }
 
+    /**
+     * Sets time for timed transitions.
+     * @param transitionList transitions
+     */
     public static void setTimedTransitions(List<Transition> transitionList) {
         for (Transition t : transitionList) {
             if (Config.TIMED_TRANSITIONS.containsKey(t.getName()))
@@ -38,6 +56,12 @@ public class Main {
         }
     }
 
+/**
+     * Creates segments based on the segments list in the config file.
+     * @param transitionList transitions
+     * @param monitor monitor
+     * @return list of segments
+     */
     public static List<Segment> createSegments(List<Transition> transitionList, Monitor monitor) {
         List<Segment> segmentList = new ArrayList<>();
         for (int i = 0; i < Config.SEGMENTS.size(); i++) {
@@ -53,6 +77,11 @@ public class Main {
         return segmentList;
     }
 
+    /**
+     * Creates threads based on the segments list in the config file.
+     * @param segmentList segments
+     * @return list of threads
+     */
     public static List<Thread> createThreads(List<Segment> segmentList) {
         List<Thread> threadList = new ArrayList<>();
         for (int i = 0; i < segmentList.size(); i++) {
@@ -65,6 +94,10 @@ public class Main {
         return threadList;
     }
 
+    /**
+     * Starts the threads.
+     * @param threadList threads
+     */
     public static void runThreads(List<Thread> threadList) {
         for (Thread t : threadList) {
             t.start();
@@ -96,9 +129,9 @@ public class Main {
         Policy policy = new Policy2(dataController);
         Monitor monitor = new Monitor(transitionList, policy, dataController, pInvariants, placeList);
 
-        connectElements(placeList, transitionList, Config.INCIDENCE_MATRIX);
+        connectPlacesAndTransitions(placeList, transitionList, Config.INCIDENCE_MATRIX);
         setTimedTransitions(transitionList);
-        markInitial(placeList, Config.INITIAL_MARKING);
+        addInitialMarksToPlaces(placeList, Config.INITIAL_PLACE_MARKING);
 
         List<Segment> segmentList = createSegments(transitionList, monitor);
         List<Thread> trheadList = createThreads(segmentList);

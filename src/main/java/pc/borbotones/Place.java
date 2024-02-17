@@ -25,14 +25,18 @@ public class Place {
         notifySubscribers();
     }
 
+    /**
+     * Attaches a subscriber to the place.
+     * @param s subscriber (Transition)
+     */
     public void atach(Subscriber s) {
         this.subscribers.add(s);
     }
 
-    public void detach(Subscriber s) {
-        this.subscribers.remove(s);
-    }
 
+    /**
+     * Notifies the subscribers (Transitions) that the place has changed.
+     */
     public void notifySubscribers() {
         for (Subscriber subscriber : this.subscribers) {
             subscriber.update(num_tokens, this);

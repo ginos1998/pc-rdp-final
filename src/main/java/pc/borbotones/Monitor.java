@@ -32,6 +32,15 @@ public class Monitor {
         this.policy = policy;
     }
 
+    /**
+     * Requests to fire a transition and waits until it can.
+     * When the dataController reaches the maximum number of invariants, the program ends.
+     * After transition is fired, verified the invariants of place
+     * Then, the next transition is selected using the policy and the next transition is signaled.
+     * Finally, free the lock.
+     * @param transition
+     * @return true if the transition was fired
+     */
     public boolean requestFire(Transition transition)  {
         try {
             lock.lock();
@@ -69,6 +78,10 @@ public class Monitor {
         }
     }
 
+    /**
+     * Returns the list of sensed transitions that are ready to fire.
+     * @return list of transitions
+     */
     private List<Transition> readyTransitions() {
         List<Transition> readyTransitions = new ArrayList<>();
         for (Transition transition : transitions_queues.keySet()){

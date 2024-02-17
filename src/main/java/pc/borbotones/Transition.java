@@ -36,8 +36,15 @@ public class Transition implements Subscriber {
         this.output.add(place);
     }
 
-    public void update(int num_tokens, Place place) {
-        this.input.put(place, num_tokens > 0);
+    /**
+     * Updates the input places of the transition.
+     * If all input places have tokens, the transition is sensibilized.
+     * Otherwise, it is unsensibilized.
+     * @param numTokens number of tokens in the place
+     * @param place place to update
+     */
+    public void update(int numTokens, Place place) {
+        this.input.put(place, numTokens > 0);
         if (this.input.values().stream().allMatch(Boolean::booleanValue))
             sensibilize();
         else
@@ -51,6 +58,9 @@ public class Transition implements Subscriber {
         this.sensStart = 0;
     }
 
+    /**
+     * Sensibilizes the transition by setting the start time to the current time and starting the timing.
+     */
     private void sensibilize(){
         if(!timing) {
             timing = true;
@@ -58,11 +68,17 @@ public class Transition implements Subscriber {
         }
     }
 
+    /**
+     * Unsensibilizes the transition by setting the start time to 0 and stopping the timing.
+     */
     private void unsensibilize(){
             this.sensStart = 0;
             timing = false;
     }
 
+    /**
+     * @return true if all the Places connected to the transition have tokens
+     */
     public boolean isSensed() {
         return (input.values().stream().allMatch(Boolean::booleanValue));
     }
@@ -80,6 +96,11 @@ public class Transition implements Subscriber {
         return alfaTime - ( System.currentTimeMillis() - this.sensStart);
     }
 
+    /**
+     * Fires the transition by removing tokens from input places and adding tokens to output places.
+     * Also, increments the number of times the transition has been fired.
+     * If the transition is not enabled, the program ends (shouldn't happen).
+     */
     public void fire() {
         if (isEnabled()) {
             for (Place place : this.input.keySet()) {

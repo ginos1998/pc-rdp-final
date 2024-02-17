@@ -6,16 +6,12 @@ import java.util.List;
 
 public class RdpException extends RuntimeException {
 
+    // Custom exception for the RDP
 
     public RdpException(String message) {
         super(message);
         Logger.getLogger().error(message);
         System.exit(1);
-    }
-
-    public RdpException(Throwable cause, String message) {
-        super(message, cause);
-        Logger.getLogger().error(message);
     }
 
     public RdpException(Throwable e, List<String> errors) {
