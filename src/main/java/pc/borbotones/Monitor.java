@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Monitor {
     private final ReentrantLock lock;
-    private final HashMap<Transition,Condition> transitions_queues;
+    private final HashMap<Transition,Condition> transitionsQueues;
     private final HashMap<List<Integer>, Integer> pInvariants;
     private final List<Place> placeList;
     private Transition next;
@@ -22,9 +22,9 @@ public class Monitor {
 
     public Monitor(List<Transition> transitions, Policy policy, DataController dataController, HashMap<List<Integer>, Integer> pInvariants, List<Place> placeList) {
         this.lock = new ReentrantLock(true);
-        this.transitions_queues = new HashMap<>();
+        this.transitionsQueues = new HashMap<>();
         for (Transition transition : transitions) {
-            this.transitions_queues.put(transition, this.lock.newCondition());
+            this.transitionsQueues.put(transition, this.lock.newCondition());
         }
         this.pInvariants = pInvariants;
         this.placeList = placeList;
@@ -40,15 +40,12 @@ public class Monitor {
                 System.exit(0);
             }
 
-            while(!(transition.equals(next) && transition.isEnabled()) ) {
-                if(next == null && transition.isEnabled()) {
-                    break;
-                }
-                if (transition.waitingTime() <= 0)
-                    transitions_queues.get(transition).await();
-
-                if(transition.waitingTime() > 0)
-                    transitions_queues.get(transition).await(transition.waitingTime(), TimeUnit.MILLISECONDS);
+            while(!((next == null || transition.equals(next)) && transition.isEnabled())) {
+                long waitingTime = transition.waitingTime();
+                if (waitingTime <= 0)
+                    transitionsQueues.get(transition).await();
+                else
+                    transitionsQueues.get(transition).await(transition.waitingTime(), TimeUnit.MILLISECONDS);
             }
 
             transition.fire();
@@ -57,7 +54,7 @@ public class Monitor {
             }
 
             next = policy.next(readyTransitions());
-            transitions_queues.get(next).signal();
+            transitionsQueues.get(next).signal();
             dataController.registerFire(transition);
             return true;
         }
@@ -71,7 +68,7 @@ public class Monitor {
 
     private List<Transition> readyTransitions() {
         List<Transition> readyTransitions = new ArrayList<>();
-        for (Transition transition : transitions_queues.keySet()){
+        for (Transition transition : transitionsQueues.keySet()){
             if(transition.isSensed()){
                 readyTransitions.add(transition);
             }
