@@ -13,7 +13,7 @@ public class RdpException extends RuntimeException {
         System.exit(1);
     }
 
-    public RdpException(String message, Throwable cause) {
+    public RdpException(Throwable cause, String message) {
         super(message, cause);
         Logger.getLogger().error(message);
     }
