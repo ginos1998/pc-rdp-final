@@ -32,4 +32,3 @@ secuencia = ""
 secuencia = get_transitions(path, patron_transicion, transiciones_contador, tiempos, secuencia)
 get_invariants(invariantes_contador, transiciones_contador, invariantes)
 check_invT(secuencia, reggex)
-

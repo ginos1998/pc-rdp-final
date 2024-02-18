@@ -1,5 +1,4 @@
 import re
-
 def get_invariants(invariantes_contador, transiciones_contador, invariantes):
     # Procesar cada invariante
     for i, invariante in enumerate(invariantes):
@@ -30,4 +29,3 @@ def check_invT(secuencia, reggex):
     contador_invariantes = len(ocurrencias)
 
     print(f"\nInvariantes ejecutados de forma exitosa: {contador_invariantes}")
-    
