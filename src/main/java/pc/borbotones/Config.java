@@ -40,7 +40,8 @@ public abstract class Config {
     );
     public static final int[] SEGMENT_THREADS = { 4, 2, 4,4,1 };
 
-    public static final int[] INITIAL_MARKING = {0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 2, 2, 3, 1, 3, 4, 6};
+    // P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, Cs1, Cs2, Cs3 respectively
+    public static final int[] INITIAL_PLACE_MARKING = {0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 4, 2, 2, 3, 1, 3, 4, 6};
 
     public static final int[][] INCIDENCE_MATRIX = {
             //T1  T2  T3  T4  T5  T6  T7  T8  T9 T10 T11 T12

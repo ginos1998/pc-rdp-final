@@ -12,7 +12,7 @@ invariantes = [
 reggex = r"(T1(?:T2T4T6|T3T5T7)T8)|(T9T10T11T12)"
 
 #Direccion del archivo que quiero leer 
-path = '/home/agustin/Desktop/Concurrente/pc-rdp-final/log.txt'
+path = '../log.txt'
 
 # Diccionario para contar las ocurrencias de cada transición
 transiciones_contador = {'T' + str(i): 0 for i in range(1, 13)}

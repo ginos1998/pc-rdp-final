@@ -51,22 +51,9 @@ public class Logger {
         error(message.toString());
     }
 
-    public void log(Object... messages) {
-        Arrays.stream(messages)
-            .filter(String.class::isInstance)
-            .forEach(m -> log(m.toString()));
-    }
-
     public void logInvariants(List<Integer> invariantsCounterList) {
         for(int i = 0; i < invariantsCounterList.size(); i++){
             String message = "Invariant " + (i+1) + " has been fired " + invariantsCounterList.get(i) + " times";
-            log(message);
-        }
-    }
-
-    public void logPercentages(List<Double> invariantPercentages) {
-        for(int i = 0; i < invariantPercentages.size(); i++){
-            String message = "Invariant " + (i+1) + " has been fired " + invariantPercentages.get(i) + " % of the times";
             log(message);
         }
     }
@@ -75,6 +62,9 @@ public class Logger {
         return System.currentTimeMillis() + " ";
     }
 
+    /**
+     * Writes the logs to a file.
+     */
     public void writeLogsToFile() {
         this.finalTime = System.currentTimeMillis();
         long totalTime = this.finalTime - this.initialTime;
@@ -89,6 +79,9 @@ public class Logger {
         }
     }
 
+    /**
+     * Clears the logs in the file.
+     */
     public void clearLogsInFile() {
         try (FileWriter fileWriter = new FileWriter("log.txt")) {
             System.out.println("Clearing logs in file...");
