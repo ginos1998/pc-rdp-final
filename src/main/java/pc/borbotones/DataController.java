@@ -43,7 +43,6 @@ public class DataController {
         List<Integer> register = new ArrayList<>();
         register.add(id);
         invariantRegisterList.add(register);
-        totalInvariants++;
     }
 
     /**
@@ -91,6 +90,7 @@ public class DataController {
                 if (Config.T_INVARIANT_LIST.get(i).stream().allMatch(reg::contains)){
                     invariantsCounterList.set(i, invariantsCounterList.get(i) + 1);
                     invariantsRunningCounterList.set(i, invariantsRunningCounterList.get(i) - 1);
+                    totalInvariants++;
                 }
             }
             Logger.getLogger().logInvariants(invariantsCounterList);

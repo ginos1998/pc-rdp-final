@@ -1,6 +1,8 @@
 package pc.borbotones;
 import pc.borbotones.Policies.Policy;
+import pc.borbotones.Policies.Policy1;
 import pc.borbotones.Policies.Policy2;
+import pc.borbotones.Policies.Policy3;
 import pc.borbotones.logger.Logger;
 
 import java.util.ArrayList;

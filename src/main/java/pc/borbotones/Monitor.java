@@ -76,7 +76,7 @@ public class Monitor {
     }
 
     /**
-     * Returns the list of sensed transitions that are ready to fire.
+     * Returns the list of sensed transitions.
      * @return list of transitions
      */
     private List<Transition> readyTransitions() {
