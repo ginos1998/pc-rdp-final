@@ -14,6 +14,7 @@ import java.util.List;
 public class Monitor {
     private final ReentrantLock lock;
     private final HashMap<Transition,Condition> transitionsQueues;
+    private final Condition timedWaitingQueue;
     private final HashMap<List<Integer>, Integer> pInvariants;
     private final List<Place> placeList;
     private Transition next;
@@ -26,6 +27,7 @@ public class Monitor {
         for (Transition transition : transitions) {
             this.transitionsQueues.put(transition, this.lock.newCondition());
         }
+        this.timedWaitingQueue = this.lock.newCondition();
         this.pInvariants = pInvariants;
         this.placeList = placeList;
         this.dataController = dataController;
@@ -49,12 +51,12 @@ public class Monitor {
                 System.exit(0);
             }
 
-            while(!((next == null || transition.equals(next)) && transition.isEnabled())) {
-                long waitingTime = transition.waitingTime();
-                if (waitingTime <= 0)
-                    transitionsQueues.get(transition).await();
-                else
-                    transitionsQueues.get(transition).await(transition.waitingTime(), TimeUnit.MILLISECONDS);
+            while (!((next == null || transition.equals(next)) && transition.isSensed()) || lock.hasWaiters(timedWaitingQueue)) {
+                transitionsQueues.get(transition).await();
+            }
+
+            if (transition.waitingTime() > 0){
+                timedWaitingQueue.await(transition.waitingTime(), TimeUnit.MILLISECONDS);
             }
 
             transition.fire();

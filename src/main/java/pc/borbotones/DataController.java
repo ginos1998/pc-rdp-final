@@ -11,10 +11,8 @@ public class DataController {
 
     private List<List<Integer>> invariantRegisterList;
     private List<Integer> invariantsCounterList;
-
     private List<Integer> invariantsRunningCounterList;
     private int totalInvariants;
-
 
     public DataController() {
         invariantRegisterList = new ArrayList<>();
