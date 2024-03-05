@@ -28,6 +28,7 @@ public class Monitor {
             this.transitionsQueues.put(transition, this.lock.newCondition());
         }
         this.timedWaitingQueue = this.lock.newCondition();
+        next = policy.next(readyTransitions());
         this.pInvariants = pInvariants;
         this.placeList = placeList;
         this.dataController = dataController;
@@ -51,7 +52,7 @@ public class Monitor {
                 System.exit(0);
             }
 
-            while (!((next == null || transition.equals(next)) && transition.isSensed()) || lock.hasWaiters(timedWaitingQueue)) {
+            while ( !transition.equals(next) || lock.hasWaiters(timedWaitingQueue)) {
                 transitionsQueues.get(transition).await();
             }
 
