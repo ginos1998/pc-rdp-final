@@ -15,13 +15,12 @@ public class Monitor {
     private final ReentrantLock lock;
     private final HashMap<Transition,Condition> transitionsQueues;
     private final Condition timedWaitingQueue;
-    private final HashMap<List<Integer>, Integer> pInvariants;
-    private final List<Place> placeList;
     private Transition next;
     private final Policy policy;
     private final DataController dataController;
+    private Boolean terminate;
 
-    public Monitor(List<Transition> transitions, Policy policy, DataController dataController, HashMap<List<Integer>, Integer> pInvariants, List<Place> placeList) {
+    public Monitor(List<Transition> transitions, Policy policy, DataController dataController) {
         this.lock = new ReentrantLock(true);
         this.transitionsQueues = new HashMap<>();
         for (Transition transition : transitions) {
@@ -29,8 +28,6 @@ public class Monitor {
         }
         this.timedWaitingQueue = this.lock.newCondition();
         next = policy.next(readyTransitions());
-        this.pInvariants = pInvariants;
-        this.placeList = placeList;
         this.dataController = dataController;
         this.policy = policy;
     }
@@ -61,7 +58,7 @@ public class Monitor {
             }
 
             transition.fire();
-            if(!(dataController.checkPInvariants(pInvariants, placeList))){
+            if(!(dataController.checkPInvariants())){
                 throw new RdpException("No se verifican los invariantes de plaza\n");
             }
 

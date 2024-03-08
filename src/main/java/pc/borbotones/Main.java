@@ -58,7 +58,7 @@ public class Main {
         }
     }
 
-/**
+    /**
      * Creates segments based on the segments list in the config file.
      * @param transitionList transitions
      * @param monitor monitor
@@ -127,9 +127,9 @@ public class Main {
         List<Transition> transitionList = Arrays.stream(Config.TRANSITIONS.values()).map(t -> new Transition(t.name(), t.ordinal()+1)).collect(Collectors.toList());
 
         setPInvariants(Config.P_INVARIANTS, placeList, pInvariants);
-        DataController dataController = new DataController();
+        DataController dataController = new DataController(pInvariants, placeList);
         Policy policy = new Policy3(dataController);
-        Monitor monitor = new Monitor(transitionList, policy, dataController, pInvariants, placeList);
+        Monitor monitor = new Monitor(transitionList, policy, dataController);
 
         connectPlacesAndTransitions(placeList, transitionList, Config.INCIDENCE_MATRIX);
         setTimedTransitions(transitionList);

@@ -13,11 +13,15 @@ public class DataController {
     private List<Integer> invariantsCounterList;
     private List<Integer> invariantsRunningCounterList;
     private int totalInvariants;
+    private final HashMap<List<Integer>, Integer> pInvariants;
+    private final List<Place> placeList;
 
-    public DataController() {
+    public DataController( HashMap<List<Integer>, Integer> pInvariants, List<Place> placeList) {
         invariantRegisterList = new ArrayList<>();
         invariantsCounterList = Arrays.asList(0, 0, 0);
         invariantsRunningCounterList = Arrays.asList(0, 0, 0);
+        this.pInvariants = pInvariants;
+        this.placeList = placeList;
     }
 
     /**
@@ -99,11 +103,9 @@ public class DataController {
 
     /**
      * Checks if the invariants are being verified
-     * @param pInvariants place invariants
-     * @param placeList list of places
      * @return true if the invariants are being verified
      */
-    public boolean checkPInvariants(HashMap<List<Integer>, Integer> pInvariants, List<Place> placeList){
+    public boolean checkPInvariants(){
         AtomicBoolean checkPassed = new AtomicBoolean(true);
         pInvariants.keySet().forEach(inv -> {
             // Suma de elementos utilizando reduce
