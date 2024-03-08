@@ -27,6 +27,7 @@ public class Monitor {
             this.transitionsQueues.put(transition, this.lock.newCondition());
         }
         this.timedWaitingQueue = this.lock.newCondition();
+        this.terminate = false;
         next = policy.next(readyTransitions());
         this.dataController = dataController;
         this.policy = policy;
@@ -46,7 +47,7 @@ public class Monitor {
             lock.lock();
 
             if (dataController.getTotalInvariants() == Config.MAX_INVARIANTS) {
-                System.exit(0);
+                terminate = true;
             }
 
             while ( !transition.equals(next) || lock.hasWaiters(timedWaitingQueue)) {
@@ -63,6 +64,9 @@ public class Monitor {
             }
 
             next = policy.next(readyTransitions());
+            if (next == null) {
+                System.exit(terminate ? 0 : 1);
+            }
             transitionsQueues.get(next).signal();
             dataController.registerFire(transition);
             return true;
@@ -83,6 +87,8 @@ public class Monitor {
         List<Transition> readyTransitions = new ArrayList<>();
         for (Transition transition : transitionsQueues.keySet()){
             if(transition.isSensed()){
+                if(terminate && (transition.getNumber() == 1 || transition.getNumber() == 9))
+                    continue;
                 readyTransitions.add(transition);
             }
         }
