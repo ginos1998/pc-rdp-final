@@ -91,7 +91,6 @@ public class DataController {
                     totalInvariants++;
                 }
             }
-            Logger.getLogger().logInvariants(invariantsCounterList);
         } catch (Exception e) {
             List<String> errors = Arrays.asList("Error incrementing counters", e.getMessage());
             throw new RdpException(e, errors);
