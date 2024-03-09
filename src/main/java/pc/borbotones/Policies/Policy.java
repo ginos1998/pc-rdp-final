@@ -18,10 +18,11 @@ public abstract class Policy {
 
     protected List<Integer> getOrderedInvariantsCounterList() {
         List<Integer> invariantsFiredList = dataController.getInvariantsCounterList();
+        List<Integer> invariantsRunningCounterList = dataController.getInvariantsRunningCounterList();
         Map<Integer, Integer> map = new HashMap<>();
 
         for (int i = 0; i < invariantsFiredList.size(); i++) {
-            map.put(i, invariantsFiredList.get(i));
+            map.put(i, invariantsFiredList.get(i) + invariantsRunningCounterList.get(i));
         }
 
         return map.entrySet().stream()

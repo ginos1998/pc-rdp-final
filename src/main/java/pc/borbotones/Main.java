@@ -128,12 +128,13 @@ public class Main {
 
         setPInvariants(Config.P_INVARIANTS, placeList, pInvariants);
         DataController dataController = new DataController(pInvariants, placeList);
-        Policy policy = new Policy3(dataController);
-        Monitor monitor = new Monitor(transitionList, policy, dataController);
+        Policy policy = new Policy2(dataController);
 
         connectPlacesAndTransitions(placeList, transitionList, Config.INCIDENCE_MATRIX);
         setTimedTransitions(transitionList);
         addInitialMarksToPlaces(placeList, Config.INITIAL_PLACE_MARKING);
+
+        Monitor monitor = new Monitor(transitionList, policy, dataController);
 
         List<Segment> segmentList = createSegments(transitionList, monitor);
         List<Thread> trheadList = createThreads(segmentList);
