@@ -128,7 +128,7 @@ public class Main {
 
         setPInvariants(Config.P_INVARIANTS, placeList, pInvariants);
         DataController dataController = new DataController(pInvariants, placeList);
-        Policy policy = new Policy2(dataController);
+        Policy policy = new Policy3(dataController);
 
         connectPlacesAndTransitions(placeList, transitionList, Config.INCIDENCE_MATRIX);
         setTimedTransitions(transitionList);
@@ -141,5 +141,4 @@ public class Main {
 
         runThreads(trheadList);
     }
-
 }
