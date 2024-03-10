@@ -1,7 +1,6 @@
 package pc.borbotones;
 
 import pc.borbotones.exceptions.RdpException;
-import pc.borbotones.logger.Logger;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -41,9 +40,9 @@ public class DataController {
         return invariantsCounterList;
     }
 
-    private void createNewRegister(Integer id) {
+    private void createNewRegister(Integer transitionNumber) {
         List<Integer> register = new ArrayList<>();
-        register.add(id);
+        register.add(transitionNumber);
         invariantRegisterList.add(register);
     }
 
