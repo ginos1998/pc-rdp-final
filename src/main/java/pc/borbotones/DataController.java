@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 public class DataController {
 
-    private List<List<Integer>> invariantRegisterList;
-    private List<Integer> invariantsCounterList;
-    private List<Integer> invariantsRunningCounterList;
+    private final List<List<Integer>> invariantRegisterList;
+    private final List<Integer> invariantsCounterList;
+    private final List<Integer> invariantsRunningCounterList;
     private int totalInvariants;
     private final HashMap<List<Integer>, Integer> pInvariants;
     private final List<Place> placeList;
@@ -44,6 +44,7 @@ public class DataController {
         List<Integer> register = new ArrayList<>();
         register.add(transitionNumber);
         invariantRegisterList.add(register);
+        totalInvariants++;
     }
 
     /**
@@ -61,6 +62,7 @@ public class DataController {
                         .findFirst()
                         .ifPresent(reg -> {
                             reg.add(transition.getNumber());
+                            updateRunningCounter(reg);
                             incrementCounters(reg);
                         });
                 });
@@ -91,12 +93,22 @@ public class DataController {
                 if (Config.T_INVARIANT_LIST.get(i).stream().allMatch(reg::contains)){
                     invariantsCounterList.set(i, invariantsCounterList.get(i) + 1);
                     invariantsRunningCounterList.set(i, invariantsRunningCounterList.get(i) - 1);
-                    totalInvariants++;
                 }
             }
         } catch (Exception e) {
             List<String> errors = Arrays.asList("Error incrementing counters", e.getMessage());
             throw new RdpException(e, errors);
+        }
+    }
+    private void updateRunningCounter(List<Integer> reg){
+        if(reg.size() <= 2){
+            List<List<Integer>> filteredInvs = Config.T_INVARIANT_LIST.stream()
+                    .filter(inv -> inv.containsAll(reg))
+                    .collect(Collectors.toList());
+
+            if(filteredInvs.size()==1){
+                invariantsRunningCounterList.set(Config.T_INVARIANT_LIST.indexOf(filteredInvs.get(0)), invariantsRunningCounterList.get(Config.T_INVARIANT_LIST.indexOf(filteredInvs.get(0)))+1);
+            }
         }
     }
 
@@ -126,6 +138,9 @@ public class DataController {
     public int getTotalInvariants() {
         return totalInvariants;
     }
+
+    public List<Integer> getInvariantsRunningCounterList(){return invariantsRunningCounterList;}
+
 }
 
 

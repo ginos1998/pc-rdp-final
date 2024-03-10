@@ -15,6 +15,11 @@ public class Policy1 extends Policy {
     @Override
     public Transition next(List<Transition> availableTransitionsList) {
         // Encuentra la cantidad mínima de disparos y el mínimo tiempo de espera inicial
+
+        if (availableTransitionsList.isEmpty()) {
+            return null;
+        }
+
         Transition selectedTransition = availableTransitionsList.get(0);
 
         for (int i = 1; i < availableTransitionsList.size(); i++) {

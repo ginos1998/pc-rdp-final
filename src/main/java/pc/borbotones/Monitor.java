@@ -50,7 +50,7 @@ public class Monitor {
                 terminate = true;
             }
 
-            while ( !transition.equals(next) || lock.hasWaiters(timedWaitingQueue)) {
+            while ( !transition.equals(next) || lock.hasWaiters(timedWaitingQueue))  {
                 transitionsQueues.get(transition).await();
             }
 
@@ -64,6 +64,7 @@ public class Monitor {
                 throw new RdpException("No se verifican los invariantes de plaza\n");
 
             next = policy.next(readyTransitions());
+            dataController.registerFire(transition);
             if (next == null) {
                 List<Integer> invariantCounterList = dataController.getInvariantsCounterList();
                 Logger.getLogger().logInvariants(invariantCounterList);
@@ -71,7 +72,6 @@ public class Monitor {
             }
 
             transitionsQueues.get(next).signal();
-            dataController.registerFire(transition);
             return true;
         }
         catch (Exception e) {
