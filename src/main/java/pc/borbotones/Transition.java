@@ -127,6 +127,9 @@ public class Transition implements Subscriber {
 
     public boolean isEnabled() {
             if(isTimed()){
+                if (!isSensed())
+                    return false;
+
                 long senseTime = System.currentTimeMillis() - this.sensStart;
                 if (senseTime < alfaTime)
                     return false;

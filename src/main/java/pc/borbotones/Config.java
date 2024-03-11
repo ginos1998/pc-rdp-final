@@ -11,14 +11,14 @@ public abstract class Config {
     }
 
     public  static  final HashMap<String, ArrayList<Integer>> TIMED_TRANSITIONS = new HashMap<String, ArrayList<Integer>>(){{
-        put("T4",   new ArrayList<>(Arrays.asList(20, 1000)));
-        put("T5",   new ArrayList<>(Arrays.asList(20, 1000)));
-        put("T6",   new ArrayList<>(Arrays.asList(30, 1000)));
-        put("T7",   new ArrayList<>(Arrays.asList(30, 1000)));
-        put("T8",   new ArrayList<>(Arrays.asList(15, 1000)));
-        put("T10",  new ArrayList<>(Arrays.asList(100, 1000)));
-        put("T11",  new ArrayList<>(Arrays.asList(100, 1000)));
-        put("T12",  new ArrayList<>(Arrays.asList(100, 1000)));
+        put("T4",   new ArrayList<>(Arrays.asList(26, 1000)));
+        put("T5",   new ArrayList<>(Arrays.asList(26, 1000)));
+        put("T6",   new ArrayList<>(Arrays.asList(39, 1000)));
+        put("T7",   new ArrayList<>(Arrays.asList(39, 1000)));
+        put("T8",   new ArrayList<>(Arrays.asList(20, 1000)));
+        put("T10",  new ArrayList<>(Arrays.asList(130, 1000)));
+        put("T11",  new ArrayList<>(Arrays.asList(130, 1000)));
+        put("T12",  new ArrayList<>(Arrays.asList(130, 1500)));
     }};
 
     public enum PLACES {
