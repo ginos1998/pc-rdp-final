@@ -59,12 +59,12 @@ public class Monitor {
             }
 
             transition.fire();
+            dataController.registerFire(transition);
 
             if(!(dataController.checkPInvariants()))
                 throw new RdpException("No se verifican los invariantes de plaza\n");
 
             next = policy.next(readyTransitions());
-            dataController.registerFire(transition);
             if (next == null) {
                 List<Integer> invariantCounterList = dataController.getInvariantsCounterList();
                 Logger.getLogger().logInvariants(invariantCounterList);
