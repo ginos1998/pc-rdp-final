@@ -87,10 +87,6 @@ public class Transition implements Subscriber {
         return this.timed;
     }
 
-    public boolean isTiming(){
-        return this.timing;
-    }
-
     public long waitingTime(){
         if(!this.timing)
             return alfaTime;
