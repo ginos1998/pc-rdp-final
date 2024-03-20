@@ -15,7 +15,6 @@ public class Monitor {
     private final ReentrantLock lock;
     private final HashMap<Transition,Condition> transitionsQueues;
     private final Condition timedWaitingQueue;
-    private Transition next;
     private final Policy policy;
     private final DataController dataController;
     private Boolean terminate;
@@ -28,7 +27,6 @@ public class Monitor {
         }
         this.timedWaitingQueue = this.lock.newCondition();
         this.terminate = false;
-        next = policy.next(readyTransitions());
         this.dataController = dataController;
         this.policy = policy;
     }
@@ -50,7 +48,7 @@ public class Monitor {
                 terminate = true;
             }
 
-            while ( !transition.equals(next) || lock.hasWaiters(timedWaitingQueue))  {
+            while ( !transition.isSensed() || lock.hasWaiters(timedWaitingQueue))  {
                 transitionsQueues.get(transition).await();
             }
 
@@ -64,14 +62,18 @@ public class Monitor {
             if(!(dataController.checkPInvariants()))
                 throw new RdpException("No se verifican los invariantes de plaza\n");
 
-            next = policy.next(readyTransitions());
-            if (next == null) {
+            Transition next = policy.next(readyTransitions());
+
+            int completados = dataController.getInvariantsCounterList().stream().mapToInt(Integer::intValue).sum();
+            if (next == null  && terminate && completados == Config.MAX_INVARIANTS) {
                 List<Integer> invariantCounterList = dataController.getInvariantsCounterList();
                 Logger.getLogger().logInvariants(invariantCounterList);
-                System.exit(terminate ? 0 : 1);
+                System.exit(0);
             }
 
-            transitionsQueues.get(next).signal();
+            if (next != null)
+                transitionsQueues.get(next).signal();
+
             return true;
         }
         catch (Exception e) {
@@ -89,7 +91,7 @@ public class Monitor {
     private List<Transition> readyTransitions() {
         List<Transition> readyTransitions = new ArrayList<>();
         for (Transition transition : transitionsQueues.keySet()){
-            if(transition.isSensed()){
+            if(transition.isSensed() && lock.hasWaiters(transitionsQueues.get(transition))) {
                 if(terminate && (transition.getNumber() == 1 || transition.getNumber() == 9))
                     continue;
                 readyTransitions.add(transition);
